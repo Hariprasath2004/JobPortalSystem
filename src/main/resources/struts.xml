@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+	<package name="jobportal" extends="struts-default">
+
+		<action name="hello" class="com.jobportal.action.HelloAction">
+
+			<result name="success">/hello.jsp</result>
+
+		</action>
+		<action name="databaseTest"
+			class="com.jobportal.action.DatabaseTestAction">
+
+			<result name="success">/database-test.jsp</result>
+			<result name="error">/database-test.jsp</result>
+
+		</action>
+		<action name="register"
+			class="com.jobportal.action.RegisterAction">
+
+			<result name="success">/registrationSuccess.jsp</result>
+			<result name="error">/register.jsp</result>
+
+		</action>
+		<action name="login" class="com.jobportal.action.LoginAction">
+
+			<result name="seeker" type="redirectAction">
+				seekerDashboard
+			</result>
+
+			<result name="recruiter" type="redirectAction">
+				recruiterDashboard
+			</result>
+
+			<result name="error">/login.jsp</result>
+
+		</action>
+		<action name="logout" class="com.jobportal.action.LogoutAction">
+
+			<result name="success">/login.jsp</result>
+
+		</action>
+		<action name="seekerDashboard"
+			class="com.jobportal.action.DashboardAction">
+
+			<param name="dashboardType">seeker</param>
+
+			<result name="success">/seekerDashboard.jsp</result>
+			<result name="login">/login.jsp</result>
+
+		</action>
+
+		<action name="recruiterDashboard"
+			class="com.jobportal.action.DashboardAction">
+
+			<param name="dashboardType">recruiter</param>
+
+			<result name="success">/recruiterDashboard.jsp</result>
+			<result name="login">/login.jsp</result>
+
+		</action>
+		<action name="candidateProfile"
+			class="com.jobportal.action.CandidateProfileAction">
+
+			<result name="success">/candidateProfile.jsp</result>
+
+			<result name="login">/login.jsp</result>
+
+			<result name="error">/candidateProfile.jsp</result>
+
+		</action>
+		<action name="education"
+			class="com.jobportal.action.EducationAction">
+
+			<result name="success">/education.jsp</result>
+			<result name="error">/education.jsp</result>
+			<result name="login">/login.jsp</result>
+
+		</action>
+		<action name="experience"
+			class="com.jobportal.action.ExperienceAction">
+
+			<result name="success">/experience.jsp</result>
+			<result name="error">/experience.jsp</result>
+			<result name="login">/login.jsp</result>
+
+		</action>
+		<action name="skill" class="com.jobportal.action.SkillAction">
+
+			<result name="success">/skills.jsp</result>
+			<result name="error">/skills.jsp</result>
+			<result name="login">/login.jsp</result>
+
+		</action>
+		<action name="job" class="com.jobportal.action.JobAction">
+
+			<result name="success">/postJob.jsp</result>
+			<result name="error">/postJob.jsp</result>
+			<result name="login">/login.jsp</result>
+
+		</action>
+		<action name="postJob"
+			class="com.jobportal.action.PostJobAction">
+
+			<result name="success">/jobPosted.jsp</result>
+
+			<result name="error">/postJob.jsp</result>
+
+			<result name="login">/login.jsp</result>
+
+		</action>
+
+
+		<action name="manageJobs"
+			class="com.jobportal.action.ManageJobsAction">
+
+			<result name="success">/manageJobs.jsp</result>
+
+			<result name="login">/login.jsp</result>
+
+		</action>
+
+
+		<action name="deleteJob"
+			class="com.jobportal.action.DeleteJobAction">
+
+			<result name="success" type="redirectAction">
+				manageJobs
+			</result>
+
+			<result name="error">/manageJobs.jsp</result>
+
+			<result name="login">/login.jsp</result>
+
+		</action>
+		<action name="companyProfile"
+			class="com.jobportal.action.CompanyProfileAction">
+
+			<result name="success">/companyProfile.jsp</result>
+
+			<result name="error">/companyProfile.jsp</result>
+
+			<result name="login">/login.jsp</result>
+
+		</action>
+		<action name="applyJob"
+        class="com.jobportal.action.ApplyJobAction">
+
+    <result name="success" type="redirectAction">
+        jobSearch
+    </result>
+
+    <result name="search" type="redirectAction">
+        jobSearch
+    </result>
+
+    <result name="login" type="redirect">
+        login.jsp
+    </result>
+
+    <result name="error">
+        /WEB-INF/jsp/jobSearch.jsp
+    </result>
+
+</action>
+		<action name="jobSearch"
+        class="com.jobportal.action.JobSearchAction">
+
+    <result name="success">
+        /jobSearch.jsp
+    </result>
+
+    <result name="error">
+        /jobSearch.jsp
+    </result>
+
+    <result name="login">
+        /login.jsp
+    </result>
+
+</action>
+<action
+    name="myApplications"
+    class="com.jobportal.action.MyApplicationsAction"
+    method="execute">
+
+    <result name="success">/myApplications.jsp</result>
+
+    <result name="login" type="redirectAction">
+        login
+    </result>
+
+    <result name="error">/seekerDashboard.jsp</result>
+
+</action>
+<action name="viewApplicants"
+        class="com.jobportal.action.ViewApplicantsAction">
+
+    <result name="success">/viewApplicants.jsp</result>
+
+    <result name="error">/recruiterDashboard.jsp</result>
+
+    <result name="login">/login.jsp</result>
+
+</action>
+<action
+    name="updateApplicationStatus"
+    class="com.jobportal.action.UpdateApplicationStatusAction">
+
+    <result name="success" type="redirectAction">
+        <param name="actionName">viewApplicants</param>
+        <param name="jobId">${jobId}</param>
+    </result>
+
+    <result name="error">/WEB-INF/views/error.jsp</result>
+    <result name="login">/login.jsp</result>
+
+</action>
+	</package>
+
+</struts>
