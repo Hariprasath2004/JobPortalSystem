@@ -10,110 +10,76 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class ApplyJobAction extends ActionSupport {
 
-    private int jobId;
+	private int jobId;
 
+	@Override
+	public String execute() {
 
-    @Override
-    public String execute() {
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpSession session = request.getSession(false);
 
-        HttpSession session =
-                request.getSession(false);
+		// Check login
+		if (session == null) {
+			return "login";
+		}
 
+		// Get logged-in seeker
+		Integer seekerId = (Integer) session.getAttribute("userId");
 
-        // Check login
-        if (session == null) {
-            return "login";
-        }
+		if (seekerId == null) {
+			return "login";
+		}
 
+		// Check role
+		String role = (String) session.getAttribute("role");
 
-        // Get logged-in seeker
-        Integer seekerId =
-                (Integer) session.getAttribute("userId");
+		if (!"JOB_SEEKER".equalsIgnoreCase(role) && !"USER".equalsIgnoreCase(role)
+				&& !"SEEKER".equalsIgnoreCase(role)) {
 
-        if (seekerId == null) {
-            return "login";
-        }
+			session.setAttribute("applicationError", "Only job seekers can apply for jobs.");
 
+			return "search";
+		}
 
-        // Check role
-        String role =
-                (String) session.getAttribute("role");
+		// Validate job ID
+		if (jobId <= 0) {
 
-        if (!"JOB_SEEKER".equalsIgnoreCase(role)
-                && !"USER".equalsIgnoreCase(role)
-                && !"SEEKER".equalsIgnoreCase(role)) {
+			session.setAttribute("applicationError", "Invalid job selected.");
 
-            session.setAttribute(
-                "applicationError",
-                "Only job seekers can apply for jobs."
-            );
+			return "search";
+		}
 
-            return "search";
-        }
+		JobApplicationDAO dao = new JobApplicationDAO();
 
+		// Check already applied
+		if (dao.hasApplied(jobId, seekerId)) {
 
-        // Validate job ID
-        if (jobId <= 0) {
+			session.setAttribute("applicationError", "You have already applied for this job.");
 
-            session.setAttribute(
-                "applicationError",
-                "Invalid job selected."
-            );
+			return "search";
+		}
 
-            return "search";
-        }
+		// Apply
+		boolean applied = dao.applyForJob(jobId, seekerId);
 
+		if (applied) {
 
-        JobApplicationDAO dao =
-                new JobApplicationDAO();
+			session.setAttribute("applicationSuccess", "Application submitted successfully.");
 
+		} else {
 
-        // Check already applied
-        if (dao.hasApplied(jobId, seekerId)) {
+			session.setAttribute("applicationError", "Failed to apply for the job.");
+		}
 
-            session.setAttribute(
-                "applicationError",
-                "You have already applied for this job."
-            );
+		return "search";
+	}
 
-            return "search";
-        }
+	public int getJobId() {
+		return jobId;
+	}
 
-
-        // Apply
-        boolean applied =
-                dao.applyForJob(jobId, seekerId);
-
-
-        if (applied) {
-
-            session.setAttribute(
-                "applicationSuccess",
-                "Application submitted successfully."
-            );
-
-        } else {
-
-            session.setAttribute(
-                "applicationError",
-                "Failed to apply for the job."
-            );
-        }
-
-
-        return "search";
-    }
-
-
-    public int getJobId() {
-        return jobId;
-    }
-
-
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
+	public void setJobId(int jobId) {
+		this.jobId = jobId;
+	}
 }

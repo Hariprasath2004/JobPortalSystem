@@ -11,66 +11,60 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class PostJobAction extends ActionSupport {
 
-    private Job job;
+	private Job job;
 
-    public String execute() {
+	public String execute() {
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpSession session =
-                request.getSession(false);
+		HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            return "login";
-        }
+		if (session == null) {
+			return "login";
+		}
 
-        Integer userId =
-                (Integer) session.getAttribute("userId");
+		Integer userId = (Integer) session.getAttribute("userId");
 
-        String role =
-                (String) session.getAttribute("role");
+		String role = (String) session.getAttribute("role");
 
-        if (userId == null) {
-            return "login";
-        }
+		if (userId == null) {
+			return "login";
+		}
 
-        if (!"EMPLOYER".equalsIgnoreCase(role)) {
-            return "login";
-        }
+		if (!"EMPLOYER".equalsIgnoreCase(role)) {
+			return "login";
+		}
 
-        // GET request
-        if (!"POST".equalsIgnoreCase(request.getMethod())) {
-            return SUCCESS;
-        }
+		// GET request
+		if (!"POST".equalsIgnoreCase(request.getMethod())) {
+			return SUCCESS;
+		}
 
-        if (job == null) {
-            addActionError("Job details are required.");
-            return ERROR;
-        }
+		if (job == null) {
+			addActionError("Job details are required.");
+			return ERROR;
+		}
 
-        job.setRecruiterId(userId);
+		job.setRecruiterId(userId);
 
-        JobDAO dao = new JobDAO();
+		JobDAO dao = new JobDAO();
 
-        boolean saved = dao.saveJob(job);
+		boolean saved = dao.saveJob(job);
 
-        if (saved) {
-            return SUCCESS;
-        }
+		if (saved) {
+			return SUCCESS;
+		}
 
-        addActionError("Unable to post job.");
+		addActionError("Unable to post job.");
 
-        return ERROR;
-    }
+		return ERROR;
+	}
 
+	public Job getJob() {
+		return job;
+	}
 
-    public Job getJob() {
-        return job;
-    }
-
-
-    public void setJob(Job job) {
-        this.job = job;
-    }
+	public void setJob(Job job) {
+		this.job = job;
+	}
 }

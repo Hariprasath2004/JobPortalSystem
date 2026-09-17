@@ -1,179 +1,130 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Recruiter Dashboard</title>
+<meta charset="UTF-8">
+<title>Recruiter Dashboard</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+	<!-- ================= NAVBAR ================= -->
 
-    <nav class="navbar">
+	<nav class="navbar">
 
-        <div class="logo">
-            JobPortal
-        </div>
+		<div class="logo">JobPortal</div>
 
-        <div>
-            <a href="recruiterDashboard">
-                Dashboard
-            </a>
+		<div>
+			<a href="recruiterDashboard"> Dashboard </a> <a href="companyProfile">
+				Company Profile </a> <a href="job"> Post Job </a> <a href="manageJobs">
+				Manage Jobs </a> <a href="manageJobs"> Applicants </a> <a href="logout">
+				Logout </a>
+		</div>
 
-            <a href="companyProfile">
-                Company Profile
-            </a>
-
-            <a href="job">
-                Post Job
-            </a>
-
-            <a href="manageJobs">
-                Manage Jobs
-            </a>
-
-            <a href="manageJobs">
-                Applicants
-            </a>
-
-            <a href="logout">
-                Logout
-            </a>
-        </div>
-
-    </nav>
+	</nav>
 
 
-    <!-- ================= MAIN CONTENT ================= -->
+	<!-- ================= MAIN CONTENT ================= -->
 
-    <div class="container">
+	<div class="container">
 
-        <!-- Page Header -->
+		<!-- Page Header -->
 
-        <div class="page-header">
+		<div class="page-header">
 
-            <h1>
-                Recruiter Dashboard
-            </h1>
+			<h1>Recruiter Dashboard</h1>
 
-            <p>
-                Manage your company, jobs and applicants from one place.
-            </p>
+			<p>Manage your company, jobs and applicants from one place.</p>
 
-        </div>
+		</div>
 
 
-        <!-- User Information -->
+		<!-- User Information -->
 
-        <div class="dashboard-header">
+		<div class="dashboard-header">
 
-            <h1>
-                Welcome, ${sessionScope.fullName}!
-            </h1>
+			<h1>Welcome, ${sessionScope.fullName}!</h1>
 
-            <p>
-                <strong>Email:</strong>
-                ${sessionScope.email}
-            </p>
+			<p>
+				<strong>Email:</strong> ${sessionScope.email}
+			</p>
 
-            <p>
-                <strong>Role:</strong>
-                ${sessionScope.role}
-            </p>
+			<p>
+				<strong>Role:</strong> ${sessionScope.role}
+			</p>
 
-        </div>
+		</div>
 
 
-        <!-- Dashboard Cards -->
+		<!-- Dashboard Cards -->
 
-        <div class="dashboard-cards">
-
-
-            <!-- Company Profile -->
-
-            <a href="companyProfile" class="dashboard-card">
-
-                <h3>
-                    Company Profile
-                </h3>
-
-                <p>
-                    Manage your company information and help
-                    job seekers learn more about your organization.
-                </p>
-
-            </a>
+		<div class="dashboard-cards">
 
 
-            <!-- Post Job -->
+			<!-- Company Profile -->
 
-            <a href="job" class="dashboard-card">
+			<a href="companyProfile" class="dashboard-card">
 
-                <h3>
-                    Post a Job
-                </h3>
+				<h3>Company Profile</h3>
 
-                <p>
-                    Create new job opportunities and find
-                    the right candidates for your company.
-                </p>
+				<p>Manage your company information and help job seekers learn
+					more about your organization.</p>
 
-            </a>
+			</a>
 
 
-            <!-- Manage Jobs -->
+			<!-- Post Job -->
 
-            <a href="manageJobs" class="dashboard-card">
+			<a href="job" class="dashboard-card">
 
-                <h3>
-                    Manage Jobs
-                </h3>
+				<h3>Post a Job</h3>
 
-                <p>
-                    View and manage all the jobs posted
-                    by your company.
-                </p>
+				<p>Create new job opportunities and find the right candidates
+					for your company.</p>
 
-            </a>
+			</a>
 
 
-            <!-- View Applicants -->
+			<!-- Manage Jobs -->
 
-            <a href="manageJobs" class="dashboard-card">
+			<a href="manageJobs" class="dashboard-card">
 
-                <h3>
-                    View Applicants
-                </h3>
+				<h3>Manage Jobs</h3>
 
-                <p>
-                    Review candidates who have applied for
-                    your posted jobs and update their status.
-                </p>
+				<p>View and manage all the jobs posted by your company.</p>
 
-            </a>
-
-        </div>
+			</a>
 
 
-        <!-- Logout -->
+			<!-- View Applicants -->
 
-        <div style="margin-top: 30px;">
+			<a href="manageJobs" class="dashboard-card">
 
-            <a href="logout" class="btn btn-danger">
-                Logout
-            </a>
+				<h3>View Applicants</h3>
 
-        </div>
+				<p>Review candidates who have applied for your posted jobs and
+					update their status.</p>
 
-    </div>
+			</a>
+
+		</div>
+
+
+		<!-- Logout -->
+
+		<div style="margin-top: 30px;">
+
+			<a href="logout" class="btn btn-danger"> Logout </a>
+
+		</div>
+
+	</div>
 
 </body>
 

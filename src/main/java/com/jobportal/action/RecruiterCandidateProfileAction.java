@@ -6,49 +6,43 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class RecruiterCandidateProfileAction extends ActionSupport {
 
-    private int userId;
+	private int userId;
 
-    private CandidateProfile profile;
+	private CandidateProfile profile;
 
+	@Override
+	public String execute() {
 
-    @Override
-    public String execute() {
+		if (userId <= 0) {
+			addActionError("Invalid candidate.");
+			return ERROR;
+		}
 
-        if (userId <= 0) {
-            addActionError("Invalid candidate.");
-            return ERROR;
-        }
+		CandidateProfileDAO dao = new CandidateProfileDAO();
 
-        CandidateProfileDAO dao =
-                new CandidateProfileDAO();
+		profile = dao.getProfileByUserId(userId);
 
-        profile = dao.getProfileByUserId(userId);
+		if (profile == null) {
+			addActionError("Candidate profile not found.");
+			return ERROR;
+		}
 
-        if (profile == null) {
-            addActionError("Candidate profile not found.");
-            return ERROR;
-        }
+		return SUCCESS;
+	}
 
-        return SUCCESS;
-    }
+	public int getUserId() {
+		return userId;
+	}
 
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
-    public int getUserId() {
-        return userId;
-    }
+	public CandidateProfile getProfile() {
+		return profile;
+	}
 
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-
-    public CandidateProfile getProfile() {
-        return profile;
-    }
-
-
-    public void setProfile(CandidateProfile profile) {
-        this.profile = profile;
-    }
+	public void setProfile(CandidateProfile profile) {
+		this.profile = profile;
+	}
 }

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 
@@ -9,171 +9,131 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <title>Job Portal - Register</title>
+<title>Job Portal - Register</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+	<!-- ================= NAVBAR ================= -->
 
-    <nav class="navbar">
+	<nav class="navbar">
 
-        <div class="logo">
-            JobPortal
-        </div>
+		<div class="logo">JobPortal</div>
 
-        <div>
+		<div>
 
-            <a href="index.jsp">Home</a>
+			<a href="index.jsp">Home</a> <a href="login.jsp">Login</a>
 
-            <a href="login.jsp">Login</a>
+		</div>
 
-        </div>
+	</nav>
 
-    </nav>
 
+	<!-- ================= PAGE ================= -->
 
-    <!-- ================= PAGE ================= -->
+	<div class="page-container">
 
-    <div class="page-container">
+		<div class="page-header">
 
-        <div class="page-header">
+			<h1>Create Account</h1>
 
-            <h1>Create Account</h1>
+			<p>Create your JobPortal account and start your journey.</p>
 
-            <p>
-                Create your JobPortal account and start your journey.
-            </p>
+		</div>
 
-        </div>
 
+		<!-- ================= REGISTER FORM ================= -->
 
-        <!-- ================= REGISTER FORM ================= -->
+		<div class="form-card">
 
-        <div class="form-card">
+			<h2>Create your account</h2>
 
-            <h2>Create your account</h2>
 
+			<!-- Struts Errors -->
 
-            <!-- Struts Errors -->
+			<s:if test="hasActionErrors()">
 
-            <s:if test="hasActionErrors()">
+				<div class="alert alert-error">
 
-                <div class="alert alert-error">
+					<s:actionerror />
 
-                    <s:actionerror/>
+				</div>
 
-                </div>
+			</s:if>
 
-            </s:if>
 
+			<form action="register" method="post">
 
-            <form action="register" method="post">
 
+				<!-- Full Name -->
 
-                <!-- Full Name -->
+				<div class="form-group">
 
-                <div class="form-group">
+					<label>Full Name</label> <input type="text" name="fullName"
+						class="form-control" placeholder="Enter your full name" required>
 
-                    <label>Full Name</label>
+				</div>
 
-                    <input
-                        type="text"
-                        name="fullName"
-                        class="form-control"
-                        placeholder="Enter your full name"
-                        required>
 
-                </div>
+				<!-- Email -->
 
+				<div class="form-group">
 
-                <!-- Email -->
+					<label>Email</label> <input type="email" name="email"
+						class="form-control" placeholder="Enter your email" required>
 
-                <div class="form-group">
+				</div>
 
-                    <label>Email</label>
 
-                    <input
-                        type="email"
-                        name="email"
-                        class="form-control"
-                        placeholder="Enter your email"
-                        required>
+				<!-- Password -->
 
-                </div>
+				<div class="form-group">
 
+					<label>Password</label> <input type="password" name="password"
+						class="form-control" placeholder="Create a password" required>
 
-                <!-- Password -->
+				</div>
 
-                <div class="form-group">
 
-                    <label>Password</label>
+				<!-- Role -->
 
-                    <input
-                        type="password"
-                        name="password"
-                        class="form-control"
-                        placeholder="Create a password"
-                        required>
+				<div class="form-group">
 
-                </div>
+					<label>Account Type</label> <select name="role"
+						class="form-control">
 
+						<option value="JOB_SEEKER">Job Seeker</option>
 
-                <!-- Role -->
+						<option value="EMPLOYER">Employer</option>
 
-                <div class="form-group">
+					</select>
 
-                    <label>Account Type</label>
+				</div>
 
-                    <select
-                        name="role"
-                        class="form-control">
 
-                        <option value="JOB_SEEKER">
-                            Job Seeker
-                        </option>
+				<!-- Register -->
 
-                        <option value="EMPLOYER">
-                            Employer
-                        </option>
+				<button type="submit" class="btn btn-primary">Create
+					Account</button>
 
-                    </select>
+			</form>
 
-                </div>
 
+			<p>
 
-                <!-- Register -->
+				Already have an account? <a href="login.jsp"> Login here </a>
 
-                <button
-                    type="submit"
-                    class="btn btn-primary">
+			</p>
 
-                    Create Account
 
-                </button>
+		</div>
 
-            </form>
-
-
-            <p>
-
-                Already have an account?
-
-                <a href="login.jsp">
-                    Login here
-                </a>
-
-            </p>
-
-
-        </div>
-
-    </div>
+	</div>
 
 </body>
 

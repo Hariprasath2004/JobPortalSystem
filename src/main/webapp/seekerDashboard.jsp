@@ -1,6 +1,5 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 
@@ -8,134 +7,97 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <title>Job Seeker Dashboard</title>
+<title>Job Seeker Dashboard</title>
 
-    <link rel="stylesheet"
-          type="text/css"
-          href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/style.css">
 
 </head>
 
 <body>
 
-    <!-- Navbar -->
+	<!-- Navbar -->
 
-    <div class="navbar">
+	<div class="navbar">
 
-        <div class="logo">
-            JobPortal
-        </div>
+		<div class="logo">JobPortal</div>
 
-        <div>
+		<div>
 
-            <a href="seekerDashboard">
-                Dashboard
-            </a>
+			<a href="seekerDashboard"> Dashboard </a> <a href="jobSearch">
+				Search Jobs </a> <a href="myApplications"> My Applications </a> <a
+				href="logout"> Logout </a>
 
-            <a href="jobSearch">
-                Search Jobs
-            </a>
+		</div>
 
-            <a href="myApplications">
-                My Applications
-            </a>
-
-            <a href="logout">
-                Logout
-            </a>
-
-        </div>
-
-    </div>
+	</div>
 
 
-    <!-- Main Content -->
+	<!-- Main Content -->
 
-    <div class="container">
+	<div class="container">
 
-        <!-- Welcome -->
+		<!-- Welcome -->
 
-        <div class="dashboard-header">
+		<div class="dashboard-header">
 
-            <h1>
-                Job Seeker Dashboard
-            </h1>
+			<h1>Job Seeker Dashboard</h1>
 
-            <p>
-                Welcome back,
-                <strong>${sessionScope.fullName}</strong>!
-            </p>
+			<p>
+				Welcome back, <strong>${sessionScope.fullName}</strong>!
+			</p>
 
-            <p>
-                Email: ${sessionScope.email}
-            </p>
+			<p>Email: ${sessionScope.email}</p>
 
-            <p>
-                Role: ${sessionScope.role}
-            </p>
+			<p>Role: ${sessionScope.role}</p>
 
-        </div>
+		</div>
 
 
-        <!-- Dashboard Cards -->
+		<!-- Dashboard Cards -->
 
-        <div class="dashboard-cards">
+		<div class="dashboard-cards">
 
-            <!-- Profile -->
+			<!-- Profile -->
 
-            <a href="candidateProfile"
-               class="dashboard-card">
+			<a href="candidateProfile" class="dashboard-card">
 
-                <h3>
-                    My Profile
-                </h3>
+				<h3>My Profile</h3>
 
-                <p>
-                    View and update your personal,
-                    education, experience and skills information.
-                </p>
+				<p>View and update your personal, education, experience and
+					skills information.</p>
 
-            </a>
+			</a>
 
 
-            <!-- Search Jobs -->
+			<!-- Search Jobs -->
 
-            <a href="jobSearch"
-               class="dashboard-card">
+			<a href="jobSearch" class="dashboard-card">
 
-                <h3>
-                    Search Jobs
-                </h3>
+				<h3>Search Jobs</h3>
 
-                <p>
-                    Find job opportunities that match
-                    your skills and experience.
-                </p>
+				<p>Find job opportunities that match your skills and experience.
+				</p>
 
-            </a>
+			</a>
 
 
-            <!-- Applications -->
+			<!-- Applications -->
 
-            <a href="myApplications"
-               class="dashboard-card">
+			<a href="myApplications" class="dashboard-card">
 
-                <h3>
-                    My Applications
-                </h3>
+				<h3>My Applications</h3>
 
-                <p>
-                    View the jobs you have applied for
-                    and track your application status.
-                </p>
+				<p>View the jobs you have applied for and track your application
+					status.</p>
 
-            </a>
+			</a>
 
-        </div>
+		</div>
 
-    </div>
+	</div>
 
 </body>
 

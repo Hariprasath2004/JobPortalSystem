@@ -9,213 +9,140 @@ import com.jobportal.util.DBConnection;
 
 public class CompanyProfileDAO {
 
-    public CompanyProfile getByRecruiterId(int recruiterId) {
+	public CompanyProfile getByRecruiterId(int recruiterId) {
 
-        String sql = """
-                SELECT
-                    company_id,
-                    recruiter_id,
-                    company_name,
-                    company_description,
-                    website,
-                    industry,
-                    company_size,
-                    location,
-                    created_at,
-                    updated_at
-                FROM company_profiles
-                WHERE recruiter_id = ?
-                """;
+		String sql = """
+				SELECT
+				    company_id,
+				    recruiter_id,
+				    company_name,
+				    company_description,
+				    website,
+				    industry,
+				    company_size,
+				    location,
+				    created_at,
+				    updated_at
+				FROM company_profiles
+				WHERE recruiter_id = ?
+				""";
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, recruiterId);
+			ps.setInt(1, recruiterId);
 
-            ResultSet rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+			if (rs.next()) {
 
-                CompanyProfile profile = new CompanyProfile();
+				CompanyProfile profile = new CompanyProfile();
 
-                profile.setCompanyId(
-                    rs.getInt("company_id")
-                );
+				profile.setCompanyId(rs.getInt("company_id"));
 
-                profile.setRecruiterId(
-                    rs.getInt("recruiter_id")
-                );
+				profile.setRecruiterId(rs.getInt("recruiter_id"));
 
-                profile.setCompanyName(
-                    rs.getString("company_name")
-                );
+				profile.setCompanyName(rs.getString("company_name"));
 
-                profile.setCompanyDescription(
-                    rs.getString("company_description")
-                );
+				profile.setCompanyDescription(rs.getString("company_description"));
 
-                profile.setWebsite(
-                    rs.getString("website")
-                );
+				profile.setWebsite(rs.getString("website"));
 
-                profile.setIndustry(
-                    rs.getString("industry")
-                );
+				profile.setIndustry(rs.getString("industry"));
 
-                profile.setCompanySize(
-                    rs.getString("company_size")
-                );
+				profile.setCompanySize(rs.getString("company_size"));
 
-                profile.setLocation(
-                    rs.getString("location")
-                );
+				profile.setLocation(rs.getString("location"));
 
-                profile.setCreatedAt(
-                    rs.getTimestamp("created_at")
-                );
+				profile.setCreatedAt(rs.getTimestamp("created_at"));
 
-                profile.setUpdatedAt(
-                    rs.getTimestamp("updated_at")
-                );
+				profile.setUpdatedAt(rs.getTimestamp("updated_at"));
 
-                return profile;
-            }
+				return profile;
+			}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-        return null;
-    }
+		return null;
+	}
 
+	public boolean saveProfile(CompanyProfile profile) {
 
-    public boolean saveProfile(CompanyProfile profile) {
+		String sql = """
+				INSERT INTO company_profiles
+				(
+				    recruiter_id,
+				    company_name,
+				    company_description,
+				    website,
+				    industry,
+				    company_size,
+				    location
+				)
+				VALUES (?, ?, ?, ?, ?, ?, ?)
+				""";
 
-        String sql = """
-                INSERT INTO company_profiles
-                (
-                    recruiter_id,
-                    company_name,
-                    company_description,
-                    website,
-                    industry,
-                    company_size,
-                    location
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """;
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+			ps.setInt(1, profile.getRecruiterId());
 
-            ps.setInt(
-                1,
-                profile.getRecruiterId()
-            );
+			ps.setString(2, profile.getCompanyName());
 
-            ps.setString(
-                2,
-                profile.getCompanyName()
-            );
+			ps.setString(3, profile.getCompanyDescription());
 
-            ps.setString(
-                3,
-                profile.getCompanyDescription()
-            );
+			ps.setString(4, profile.getWebsite());
 
-            ps.setString(
-                4,
-                profile.getWebsite()
-            );
+			ps.setString(5, profile.getIndustry());
 
-            ps.setString(
-                5,
-                profile.getIndustry()
-            );
+			ps.setString(6, profile.getCompanySize());
 
-            ps.setString(
-                6,
-                profile.getCompanySize()
-            );
+			ps.setString(7, profile.getLocation());
 
-            ps.setString(
-                7,
-                profile.getLocation()
-            );
+			return ps.executeUpdate() > 0;
 
-            return ps.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+	public boolean updateProfile(CompanyProfile profile) {
 
+		String sql = """
+				UPDATE company_profiles
+				SET
+				    company_name = ?,
+				    company_description = ?,
+				    website = ?,
+				    industry = ?,
+				    company_size = ?,
+				    location = ?,
+				    updated_at = CURRENT_TIMESTAMP
+				WHERE recruiter_id = ?
+				""";
 
-    public boolean updateProfile(CompanyProfile profile) {
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-        String sql = """
-                UPDATE company_profiles
-                SET
-                    company_name = ?,
-                    company_description = ?,
-                    website = ?,
-                    industry = ?,
-                    company_size = ?,
-                    location = ?,
-                    updated_at = CURRENT_TIMESTAMP
-                WHERE recruiter_id = ?
-                """;
+			ps.setString(1, profile.getCompanyName());
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+			ps.setString(2, profile.getCompanyDescription());
 
-            ps.setString(
-                1,
-                profile.getCompanyName()
-            );
+			ps.setString(3, profile.getWebsite());
 
-            ps.setString(
-                2,
-                profile.getCompanyDescription()
-            );
+			ps.setString(4, profile.getIndustry());
 
-            ps.setString(
-                3,
-                profile.getWebsite()
-            );
+			ps.setString(5, profile.getCompanySize());
 
-            ps.setString(
-                4,
-                profile.getIndustry()
-            );
+			ps.setString(6, profile.getLocation());
 
-            ps.setString(
-                5,
-                profile.getCompanySize()
-            );
+			ps.setInt(7, profile.getRecruiterId());
 
-            ps.setString(
-                6,
-                profile.getLocation()
-            );
+			return ps.executeUpdate() > 0;
 
-            ps.setInt(
-                7,
-                profile.getRecruiterId()
-            );
-
-            return ps.executeUpdate() > 0;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

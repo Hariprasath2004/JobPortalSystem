@@ -149,78 +149,75 @@
 
 		</action>
 		<action name="applyJob"
-        class="com.jobportal.action.ApplyJobAction">
+			class="com.jobportal.action.ApplyJobAction">
 
-    <result name="success" type="redirectAction">
-        jobSearch
-    </result>
+			<result name="success" type="redirectAction">
+				jobSearch
+			</result>
 
-    <result name="search" type="redirectAction">
-        jobSearch
-    </result>
+			<result name="search" type="redirectAction">
+				jobSearch
+			</result>
 
-    <result name="login" type="redirect">
-        login.jsp
-    </result>
+			<result name="login" type="redirect">
+				login.jsp
+			</result>
 
-    <result name="error">
-        /WEB-INF/jsp/jobSearch.jsp
-    </result>
+			<result name="error">
+				/WEB-INF/jsp/jobSearch.jsp
+			</result>
 
-</action>
+		</action>
 		<action name="jobSearch"
-        class="com.jobportal.action.JobSearchAction">
+			class="com.jobportal.action.JobSearchAction">
 
-    <result name="success">
-        /jobSearch.jsp
-    </result>
+			<result name="success">
+				/jobSearch.jsp
+			</result>
 
-    <result name="error">
-        /jobSearch.jsp
-    </result>
+			<result name="error">
+				/jobSearch.jsp
+			</result>
 
-    <result name="login">
-        /login.jsp
-    </result>
+			<result name="login">
+				/login.jsp
+			</result>
 
-</action>
-<action
-    name="myApplications"
-    class="com.jobportal.action.MyApplicationsAction"
-    method="execute">
+		</action>
+		<action name="myApplications"
+			class="com.jobportal.action.MyApplicationsAction" method="execute">
 
-    <result name="success">/myApplications.jsp</result>
+			<result name="success">/myApplications.jsp</result>
 
-    <result name="login" type="redirectAction">
-        login
-    </result>
+			<result name="login" type="redirectAction">
+				login
+			</result>
 
-    <result name="error">/seekerDashboard.jsp</result>
+			<result name="error">/seekerDashboard.jsp</result>
 
-</action>
-<action name="viewApplicants"
-        class="com.jobportal.action.ViewApplicantsAction">
+		</action>
+		<action name="viewApplicants"
+			class="com.jobportal.action.ViewApplicantsAction">
 
-    <result name="success">/viewApplicants.jsp</result>
+			<result name="success">/viewApplicants.jsp</result>
 
-    <result name="error">/recruiterDashboard.jsp</result>
+			<result name="error">/recruiterDashboard.jsp</result>
 
-    <result name="login">/login.jsp</result>
+			<result name="login">/login.jsp</result>
 
-</action>
-<action
-    name="updateApplicationStatus"
-    class="com.jobportal.action.UpdateApplicationStatusAction">
+		</action>
+		<action name="updateApplicationStatus"
+			class="com.jobportal.action.UpdateApplicationStatusAction">
 
-    <result name="success" type="redirectAction">
-        <param name="actionName">viewApplicants</param>
-        <param name="jobId">${jobId}</param>
-    </result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">viewApplicants</param>
+				<param name="jobId">${jobId}</param>
+			</result>
 
-    <result name="error">/WEB-INF/views/error.jsp</result>
-    <result name="login">/login.jsp</result>
+			<result name="error">/WEB-INF/views/error.jsp</result>
+			<result name="login">/login.jsp</result>
 
-</action>
+		</action>
 	</package>
 
 </struts>

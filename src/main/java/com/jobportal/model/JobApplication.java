@@ -4,58 +4,53 @@ import java.sql.Timestamp;
 
 public class JobApplication {
 
-    private int applicationId;
+	private int applicationId;
 
-    private int jobId;
+	private int jobId;
 
-    private int seekerId;
+	private int seekerId;
 
-    private String applicationStatus;
+	private String applicationStatus;
 
-    private Timestamp appliedAt;
+	private Timestamp appliedAt;
 
+	public int getApplicationId() {
+		return applicationId;
+	}
 
-    public int getApplicationId() {
-        return applicationId;
-    }
+	public void setApplicationId(int applicationId) {
+		this.applicationId = applicationId;
+	}
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
-    }
+	public int getJobId() {
+		return jobId;
+	}
 
+	public void setJobId(int jobId) {
+		this.jobId = jobId;
+	}
 
-    public int getJobId() {
-        return jobId;
-    }
+	public int getSeekerId() {
+		return seekerId;
+	}
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
+	public void setSeekerId(int seekerId) {
+		this.seekerId = seekerId;
+	}
 
+	public String getApplicationStatus() {
+		return applicationStatus;
+	}
 
-    public int getSeekerId() {
-        return seekerId;
-    }
+	public void setApplicationStatus(String applicationStatus) {
+		this.applicationStatus = applicationStatus;
+	}
 
-    public void setSeekerId(int seekerId) {
-        this.seekerId = seekerId;
-    }
+	public Timestamp getAppliedAt() {
+		return appliedAt;
+	}
 
-
-    public String getApplicationStatus() {
-        return applicationStatus;
-    }
-
-    public void setApplicationStatus(String applicationStatus) {
-        this.applicationStatus = applicationStatus;
-    }
-
-
-    public Timestamp getAppliedAt() {
-        return appliedAt;
-    }
-
-    public void setAppliedAt(Timestamp appliedAt) {
-        this.appliedAt = appliedAt;
-    }
+	public void setAppliedAt(Timestamp appliedAt) {
+		this.appliedAt = appliedAt;
+	}
 }

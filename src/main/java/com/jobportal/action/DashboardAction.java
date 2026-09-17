@@ -9,51 +9,48 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class DashboardAction extends ActionSupport {
 
-    private String dashboardType;
+	private String dashboardType;
 
-    @Override
-    public String execute() {
+	@Override
+	public String execute() {
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(false);
 
-        // No login session
-        if (session == null) {
-            return LOGIN;
-        }
+		// No login session
+		if (session == null) {
+			return LOGIN;
+		}
 
-        String role = (String) session.getAttribute("role");
+		String role = (String) session.getAttribute("role");
 
-        // No role stored in session
-        if (role == null) {
-            return LOGIN;
-        }
+		// No role stored in session
+		if (role == null) {
+			return LOGIN;
+		}
 
-        // Job Seeker dashboard
-        if (dashboardType.equals("seeker")
-                && role.equals("JOB_SEEKER")) {
+		// Job Seeker dashboard
+		if (dashboardType.equals("seeker") && role.equals("JOB_SEEKER")) {
 
-            return SUCCESS;
-        }
+			return SUCCESS;
+		}
 
-        // Recruiter dashboard
-        if (dashboardType.equals("recruiter")
-                && role.equals("EMPLOYER")) {
+		// Recruiter dashboard
+		if (dashboardType.equals("recruiter") && role.equals("EMPLOYER")) {
 
-            return SUCCESS;
-        }
+			return SUCCESS;
+		}
 
-        // Wrong dashboard for the logged-in role
-        return LOGIN;
-    }
+		// Wrong dashboard for the logged-in role
+		return LOGIN;
+	}
 
-    public String getDashboardType() {
-        return dashboardType;
-    }
+	public String getDashboardType() {
+		return dashboardType;
+	}
 
-    public void setDashboardType(String dashboardType) {
-        this.dashboardType = dashboardType;
-    }
+	public void setDashboardType(String dashboardType) {
+		this.dashboardType = dashboardType;
+	}
 }

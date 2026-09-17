@@ -1,8 +1,7 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 
@@ -10,308 +9,253 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <title>Search Jobs - JobPortal</title>
+<title>Search Jobs - JobPortal</title>
 
-    <link rel="stylesheet"
-          type="text/css"
-          href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/style.css">
 
 </head>
 
 <body>
 
-    <!-- =========================
+	<!-- =========================
          NAVBAR
          ========================= -->
 
-    <div class="navbar">
+	<div class="navbar">
 
-        <div class="logo">
-            JobPortal
-        </div>
+		<div class="logo">JobPortal</div>
 
-        <div>
+		<div>
 
-            <a href="seekerDashboard">
-                Dashboard
-            </a>
+			<a href="seekerDashboard"> Dashboard </a> <a href="jobSearch">
+				Search Jobs </a> <a href="myApplications"> My Applications </a> <a
+				href="logout"> Logout </a>
 
-            <a href="jobSearch">
-                Search Jobs
-            </a>
+		</div>
 
-            <a href="myApplications">
-                My Applications
-            </a>
-
-            <a href="logout">
-                Logout
-            </a>
-
-        </div>
-
-    </div>
+	</div>
 
 
-    <!-- =========================
+	<!-- =========================
          MAIN CONTENT
          ========================= -->
 
-    <div class="container">
+	<div class="container">
 
-        <!-- Page Header -->
+		<!-- Page Header -->
 
-        <div class="page-header">
+		<div class="page-header">
 
-            <h1>
-                Search Jobs
-            </h1>
+			<h1>Search Jobs</h1>
 
-            <p>
-                Find your next career opportunity.
-            </p>
+			<p>Find your next career opportunity.</p>
 
-        </div>
+		</div>
 
 
-        <!-- =========================
+		<!-- =========================
              SUCCESS / ERROR MESSAGES
              ========================= -->
 
-        <s:if test="hasActionMessages()">
+		<s:if test="hasActionMessages()">
 
-            <div class="alert alert-success">
+			<div class="alert alert-success">
 
-                <s:actionmessage />
+				<s:actionmessage />
 
-            </div>
+			</div>
 
-        </s:if>
-
-
-        <s:if test="hasActionErrors()">
-
-            <div class="alert alert-error">
-
-                <s:actionerror />
-
-            </div>
-
-        </s:if>
+		</s:if>
 
 
-        <!-- =========================
+		<s:if test="hasActionErrors()">
+
+			<div class="alert alert-error">
+
+				<s:actionerror />
+
+			</div>
+
+		</s:if>
+
+
+		<!-- =========================
              JOB LIST
              ========================= -->
 
-        <s:if test="jobs != null && !jobs.isEmpty()">
+		<s:if test="jobs != null && !jobs.isEmpty()">
 
-            <s:iterator value="jobs">
+			<s:iterator value="jobs">
 
-                <div class="job-card">
+				<div class="job-card">
 
-                    <!-- Job Title -->
+					<!-- Job Title -->
 
-                    <h2>
-                        <s:property value="jobTitle"/>
-                    </h2>
-
-
-                    <!-- Company -->
-
-                    <p class="job-info">
-
-                        <strong>
-                            Company:
-                        </strong>
-
-                        <s:property value="companyName"/>
-
-                    </p>
+					<h2>
+						<s:property value="jobTitle" />
+					</h2>
 
 
-                    <!-- Location -->
+					<!-- Company -->
 
-                    <p class="job-info">
+					<p class="job-info">
 
-                        <strong>
-                            Location:
-                        </strong>
+						<strong> Company: </strong>
 
-                        <s:property value="location"/>
+						<s:property value="companyName" />
 
-                    </p>
+					</p>
 
 
-                    <!-- Job Type -->
+					<!-- Location -->
 
-                    <p class="job-info">
+					<p class="job-info">
 
-                        <strong>
-                            Job Type:
-                        </strong>
+						<strong> Location: </strong>
 
-                        <s:property value="jobType"/>
+						<s:property value="location" />
 
-                    </p>
+					</p>
 
 
-                    <!-- Experience -->
+					<!-- Job Type -->
 
-                    <p class="job-info">
+					<p class="job-info">
 
-                        <strong>
-                            Experience:
-                        </strong>
+						<strong> Job Type: </strong>
 
-                        <s:property value="experienceRequired"/>
+						<s:property value="jobType" />
 
-                    </p>
+					</p>
 
 
-                    <!-- Skills -->
+					<!-- Experience -->
 
-                    <p class="job-info">
+					<p class="job-info">
 
-                        <strong>
-                            Required Skills:
-                        </strong>
+						<strong> Experience: </strong>
 
-                        <s:property value="requiredSkills"/>
+						<s:property value="experienceRequired" />
 
-                    </p>
+					</p>
 
 
-                    <!-- Salary -->
+					<!-- Skills -->
 
-                    <p class="job-info">
+					<p class="job-info">
 
-                        <strong>
-                            Salary:
-                        </strong>
+						<strong> Required Skills: </strong>
 
-                        <s:if test="salaryMin != null">
+						<s:property value="requiredSkills" />
 
-                            ₹<s:property value="salaryMin"/>
+					</p>
 
-                        </s:if>
 
-                        <s:if test="salaryMax != null">
+					<!-- Salary -->
+
+					<p class="job-info">
+
+						<strong> Salary: </strong>
+
+						<s:if test="salaryMin != null">
+
+                            ₹<s:property value="salaryMin" />
+
+						</s:if>
+
+						<s:if test="salaryMax != null">
 
                             -
 
-                            ₹<s:property value="salaryMax"/>
+                            ₹<s:property value="salaryMax" />
 
-                        </s:if>
+						</s:if>
 
-                    </p>
-
-
-                    <!-- Description -->
-
-                    <div class="job-description">
-
-                        <strong>
-                            Job Description
-                        </strong>
-
-                        <p>
-
-                            <s:property value="jobDescription"/>
-
-                        </p>
-
-                    </div>
+					</p>
 
 
-                    <br>
+					<!-- Description -->
+
+					<div class="job-description">
+
+						<strong> Job Description </strong>
+
+						<p>
+
+							<s:property value="jobDescription" />
+
+						</p>
+
+					</div>
 
 
-                    <!-- =========================
+					<br>
+
+
+					<!-- =========================
                          APPLY BUTTON
                          ========================= -->
 
-                    <s:if test="appliedJobIds.contains(jobId)">
+					<s:if test="appliedJobIds.contains(jobId)">
 
-                        <button
-                            type="button"
-                            class="btn btn-disabled"
-                            disabled>
+						<button type="button" class="btn btn-disabled" disabled>
 
-                            Already Applied
+							Already Applied</button>
 
-                        </button>
-
-                    </s:if>
+					</s:if>
 
 
-                    <s:else>
+					<s:else>
 
-                        <form
-                            action="applyJob"
-                            method="post">
+						<form action="applyJob" method="post">
 
-                            <input
-                                type="hidden"
-                                name="jobId"
-                                value="<s:property value='jobId'/>">
+							<input type="hidden" name="jobId"
+								value="<s:property value='jobId'/>">
 
-                            <button
-                                type="submit"
-                                class="btn btn-primary">
+							<button type="submit" class="btn btn-primary">Apply Job
 
-                                Apply Job
+							</button>
 
-                            </button>
+						</form>
 
-                        </form>
+					</s:else>
 
-                    </s:else>
+				</div>
 
-                </div>
+			</s:iterator>
 
-            </s:iterator>
-
-        </s:if>
+		</s:if>
 
 
-        <!-- =========================
+		<!-- =========================
              NO JOBS
              ========================= -->
 
-        <s:else>
+		<s:else>
 
-            <div class="form-card">
+			<div class="form-card">
 
-                <h2>
-                    No Jobs Available
-                </h2>
+				<h2>No Jobs Available</h2>
 
-                <p>
-                    Recruiters have not posted any jobs yet.
-                </p>
+				<p>Recruiters have not posted any jobs yet.</p>
 
-            </div>
+			</div>
 
-        </s:else>
+		</s:else>
 
 
-        <br>
+		<br>
 
 
-        <!-- Back -->
+		<!-- Back -->
 
-        <a
-            href="seekerDashboard"
-            class="btn btn-secondary">
+		<a href="seekerDashboard" class="btn btn-secondary"> Back to
+			Dashboard </a>
 
-            Back to Dashboard
-
-        </a>
-
-    </div>
+	</div>
 
 </body>
 

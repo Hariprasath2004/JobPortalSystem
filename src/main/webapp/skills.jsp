@@ -1,100 +1,85 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 
 <html>
 
 <head>
-    <title>My Skills</title>
+<title>My Skills</title>
 </head>
 
 <body>
 
-    <h1>My Skills</h1>
+	<h1>My Skills</h1>
 
-    <s:actionerror />
+	<s:actionerror />
 
-    <p>
-        Logged-in User ID:
-        ${sessionScope.userId}
-    </p>
+	<p>Logged-in User ID: ${sessionScope.userId}</p>
 
-    <hr>
+	<hr>
 
-    <h2>Add Skill</h2>
+	<h2>Add Skill</h2>
 
-    <form action="skill" method="post">
+	<form action="skill" method="post">
 
-        <label>Skill Name:</label>
+		<label>Skill Name:</label> <input type="text" name="skill.skillName"
+			required> <br>
+		<br> <label>Proficiency:</label> <select name="skill.skillLevel">
 
-        <input type="text"
-               name="skill.skillName"
-               required>
+			<option value="">Select Proficiency</option>
 
-        <br><br>
+			<option value="Beginner">Beginner</option>
 
-        <label>Proficiency:</label>
+			<option value="Intermediate">Intermediate</option>
 
-        <select name="skill.skillLevel">
+			<option value="Advanced">Advanced</option>
 
-            <option value="">Select Proficiency</option>
+		</select> <br>
+		<br>
 
-            <option value="Beginner">Beginner</option>
+		<button type="submit">Add Skill</button>
 
-            <option value="Intermediate">Intermediate</option>
+	</form>
 
-            <option value="Advanced">Advanced</option>
+	<hr>
 
-        </select>
+	<h2>My Skills</h2>
 
-        <br><br>
+	<s:if test="skills != null && !skills.isEmpty()">
 
-        <button type="submit">Add Skill</button>
+		<s:iterator value="skills">
 
-    </form>
+			<div>
 
-    <hr>
+				<h3>
+					<s:property value="skillName" />
+				</h3>
 
-    <h2>My Skills</h2>
+				<p>
+					<strong>Proficiency:</strong>
+					<s:property value="skillLevel" />
+				</p>
 
-    <s:if test="skills != null && !skills.isEmpty()">
+			</div>
 
-        <s:iterator value="skills">
+			<hr>
 
-            <div>
+		</s:iterator>
 
-                <h3>
-                    <s:property value="skillName"/>
-                </h3>
+	</s:if>
 
-                <p>
-                    <strong>Proficiency:</strong>
-                    <s:property value="skillLevel"/>
-                </p>
+	<s:else>
 
-            </div>
+		<p>No skills added yet.</p>
 
-            <hr>
+	</s:else>
 
-        </s:iterator>
+	<br>
 
-    </s:if>
-
-    <s:else>
-
-        <p>No skills added yet.</p>
-
-    </s:else>
-
-    <br>
-
-    <a href="seekerDashboard">
-        Back to Dashboard
-    </a>
+	<a href="seekerDashboard"> Back to Dashboard </a>
 
 </body>
 

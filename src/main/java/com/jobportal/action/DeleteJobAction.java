@@ -10,55 +10,48 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class DeleteJobAction extends ActionSupport {
 
-    private int jobId;
+	private int jobId;
 
-    public String execute() {
+	public String execute() {
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpSession session =
-                request.getSession(false);
+		HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            return "login";
-        }
+		if (session == null) {
+			return "login";
+		}
 
-        Integer userId =
-                (Integer) session.getAttribute("userId");
+		Integer userId = (Integer) session.getAttribute("userId");
 
-        String role =
-                (String) session.getAttribute("role");
+		String role = (String) session.getAttribute("role");
 
-        if (userId == null) {
-            return "login";
-        }
+		if (userId == null) {
+			return "login";
+		}
 
-        if (!"EMPLOYER".equalsIgnoreCase(role)) {
-            return "login";
-        }
+		if (!"EMPLOYER".equalsIgnoreCase(role)) {
+			return "login";
+		}
 
-        JobDAO dao = new JobDAO();
+		JobDAO dao = new JobDAO();
 
-        boolean deleted =
-                dao.deleteJob(jobId, userId);
+		boolean deleted = dao.deleteJob(jobId, userId);
 
-        if (deleted) {
-            return SUCCESS;
-        }
+		if (deleted) {
+			return SUCCESS;
+		}
 
-        addActionError("Unable to delete job.");
+		addActionError("Unable to delete job.");
 
-        return ERROR;
-    }
+		return ERROR;
+	}
 
+	public int getJobId() {
+		return jobId;
+	}
 
-    public int getJobId() {
-        return jobId;
-    }
-
-
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
+	public void setJobId(int jobId) {
+		this.jobId = jobId;
+	}
 }

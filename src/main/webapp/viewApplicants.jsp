@@ -1,239 +1,177 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 <html>
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <title>View Applicants - JobPortal</title>
+<title>View Applicants - JobPortal</title>
 
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/style.css">
 
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+	<!-- ================= NAVBAR ================= -->
 
-<div class="navbar">
+	<div class="navbar">
 
-    <div class="logo">
-        JobPortal
-    </div>
+		<div class="logo">JobPortal</div>
 
-    <div class="nav-links">
+		<div class="nav-links">
 
-        <a href="recruiterDashboard">
-            Dashboard
-        </a>
+			<a href="recruiterDashboard"> Dashboard </a> <a href="companyProfile">
+				Company Profile </a> <a href="postJob"> Post Job </a> <a
+				href="manageJobs"> Manage Jobs </a> <a href="viewApplicants">
+				Applicants </a> <a href="Logout"> Logout </a>
 
-        <a href="companyProfile">
-            Company Profile
-        </a>
+		</div>
 
-        <a href="postJob">
-            Post Job
-        </a>
-
-        <a href="manageJobs">
-            Manage Jobs
-        </a>
-
-        <a href="viewApplicants">
-            Applicants
-        </a>
-
-        <a href="Logout">
-            Logout
-        </a>
-
-    </div>
-
-</div>
+	</div>
 
 
-<!-- ================= MAIN CONTENT ================= -->
+	<!-- ================= MAIN CONTENT ================= -->
 
-<div class="container">
+	<div class="container">
 
-    <div class="page-header">
+		<div class="page-header">
 
-        <h1>Job Applicants</h1>
+			<h1>Job Applicants</h1>
 
-        <p>
-            Review candidates who have applied for this job.
-        </p>
+			<p>Review candidates who have applied for this job.</p>
 
-    </div>
+		</div>
 
 
-    <s:actionerror />
+		<s:actionerror />
 
 
-    <!-- ================= APPLICANTS ================= -->
+		<!-- ================= APPLICANTS ================= -->
 
-    <s:if test="applicants != null && !applicants.isEmpty()">
+		<s:if test="applicants != null && !applicants.isEmpty()">
 
-        <div class="applicants-card">
+			<div class="applicants-card">
 
-            <div class="table-wrapper">
+				<div class="table-wrapper">
 
-                <table class="applicants-table">
+					<table class="applicants-table">
 
-                    <thead>
+						<thead>
 
-                        <tr>
+							<tr>
 
-                            <th>Application ID</th>
+								<th>Application ID</th>
 
-                            <th>Candidate ID</th>
+								<th>Candidate ID</th>
 
-                            <th>Candidate Name</th>
+								<th>Candidate Name</th>
 
-                            <th>Candidate Email</th>
+								<th>Candidate Email</th>
 
-                            <th>Job Title</th>
+								<th>Job Title</th>
 
-                            <th>Status</th>
+								<th>Status</th>
 
-                            <th>Applied Date</th>
+								<th>Applied Date</th>
 
-                            <th>Update Status</th>
+								<th>Update Status</th>
 
-                        </tr>
+							</tr>
 
-                    </thead>
+						</thead>
 
 
-                    <tbody>
+						<tbody>
 
-                        <s:iterator value="applicants">
+							<s:iterator value="applicants">
 
-                            <tr>
+								<tr>
 
-                                <td>
-                                    <s:property value="applicationId" />
-                                </td>
+									<td><s:property value="applicationId" /></td>
 
-                                <td>
-                                    <s:property value="seekerId" />
-                                </td>
+									<td><s:property value="seekerId" /></td>
 
-                                <td class="candidate-name">
-                                    <s:property value="seekerName" />
-                                </td>
+									<td class="candidate-name"><s:property value="seekerName" />
+									</td>
 
-                                <td>
-                                    <s:property value="seekerEmail" />
-                                </td>
+									<td><s:property value="seekerEmail" /></td>
 
-                                <td>
-                                    <s:property value="jobTitle" />
-                                </td>
+									<td><s:property value="jobTitle" /></td>
 
-                                <td>
+									<td><span class="status-badge"> <s:property
+												value="applicationStatus" />
 
-                                    <span class="status-badge">
+									</span></td>
 
-                                        <s:property
-                                            value="applicationStatus" />
+									<td><s:property value="appliedAt" /></td>
 
-                                    </span>
+									<td><s:form action="updateApplicationStatus" method="post"
+											cssClass="status-form">
 
-                                </td>
+											<s:hidden name="applicationId" value="%{applicationId}" />
 
-                                <td>
-                                    <s:property value="appliedAt" />
-                                </td>
+											<s:hidden name="jobId" value="%{jobId}" />
 
-                                <td>
-
-                                    <s:form
-                                        action="updateApplicationStatus"
-                                        method="post"
-                                        cssClass="status-form">
-
-                                        <s:hidden
-                                            name="applicationId"
-                                            value="%{applicationId}" />
-
-                                        <s:hidden
-                                            name="jobId"
-                                            value="%{jobId}" />
-
-                                        <s:select
-                                            name="status"
-                                            list="#{
+											<s:select name="status"
+												list="#{
                                                 'SHORTLISTED':'SHORTLISTED',
                                                 'INTERVIEW':'INTERVIEW',
                                                 'SELECTED':'SELECTED',
                                                 'REJECTED':'REJECTED'
                                             }"
-                                            value="%{applicationStatus}"
-                                            cssClass="status-select" />
+												value="%{applicationStatus}" cssClass="status-select" />
 
-                                        <s:submit
-                                            value="Update"
-                                            cssClass="btn btn-primary" />
+											<s:submit value="Update" cssClass="btn btn-primary" />
 
-                                    </s:form>
+										</s:form></td>
 
-                                </td>
+								</tr>
 
-                            </tr>
+							</s:iterator>
 
-                        </s:iterator>
+						</tbody>
 
-                    </tbody>
+					</table>
 
-                </table>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
-
-    </s:if>
+		</s:if>
 
 
-    <!-- ================= NO APPLICANTS ================= -->
+		<!-- ================= NO APPLICANTS ================= -->
 
-    <s:else>
+		<s:else>
 
-        <div class="empty-state">
+			<div class="empty-state">
 
-            <div class="empty-icon">
-                👥
-            </div>
+				<div class="empty-icon">👥</div>
 
-            <h2>No Applicants Yet</h2>
+				<h2>No Applicants Yet</h2>
 
-            <p>
-                No applicants have applied for this job yet.
-            </p>
+				<p>No applicants have applied for this job yet.</p>
 
-        </div>
+			</div>
 
-    </s:else>
+		</s:else>
 
 
-    <!-- ================= ACTIONS ================= -->
+		<!-- ================= ACTIONS ================= -->
 
-    <div class="page-actions">
+		<div class="page-actions">
 
-        <a href="manageJobs" class="btn btn-secondary">
-            Back to Manage Jobs
-        </a>
+			<a href="manageJobs" class="btn btn-secondary"> Back to Manage
+				Jobs </a> <a href="recruiterDashboard" class="btn btn-outline"> Back
+				to Dashboard </a>
 
-        <a href="recruiterDashboard" class="btn btn-outline">
-            Back to Dashboard
-        </a>
+		</div>
 
-    </div>
-
-</div>
+	</div>
 
 </body>
 </html>

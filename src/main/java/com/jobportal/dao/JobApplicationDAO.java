@@ -9,346 +9,277 @@ import com.jobportal.model.JobApplication;
 import com.jobportal.util.DBConnection;
 import java.util.ArrayList;
 import java.util.List;
+
 public class JobApplicationDAO {
 
+	public boolean hasApplied(int jobId, int seekerId) {
 
-    public boolean hasApplied(int jobId, int seekerId) {
+		String sql = """
+				SELECT application_id
+				FROM job_applications
+				WHERE job_id = ?
+				AND seeker_id = ?
+				""";
 
-        String sql = """
-                SELECT application_id
-                FROM job_applications
-                WHERE job_id = ?
-                AND seeker_id = ?
-                """;
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+			ps.setInt(1, jobId);
+			ps.setInt(2, seekerId);
 
-            ps.setInt(1, jobId);
-            ps.setInt(2, seekerId);
+			ResultSet rs = ps.executeQuery();
 
-            ResultSet rs = ps.executeQuery();
+			return rs.next();
 
-            return rs.next();
+		} catch (Exception e) {
 
-        } catch (Exception e) {
+			e.printStackTrace();
 
-            e.printStackTrace();
+			return false;
+		}
+	}
 
-            return false;
-        }
-    }
+	public boolean applyForJob(int jobId, int seekerId) {
 
+		String sql = """
+				INSERT INTO job_applications
+				(
+				    job_id,
+				    seeker_id,
+				    application_status
+				)
+				VALUES (?, ?, 'APPLIED')
+				""";
 
-    public boolean applyForJob(int jobId, int seekerId) {
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-        String sql = """
-                INSERT INTO job_applications
-                (
-                    job_id,
-                    seeker_id,
-                    application_status
-                )
-                VALUES (?, ?, 'APPLIED')
-                """;
+			ps.setInt(1, jobId);
+			ps.setInt(2, seekerId);
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+			return ps.executeUpdate() > 0;
 
-            ps.setInt(1, jobId);
-            ps.setInt(2, seekerId);
+		} catch (Exception e) {
 
-            return ps.executeUpdate() > 0;
+			e.printStackTrace();
 
-        } catch (Exception e) {
+			return false;
+		}
+	}
 
-            e.printStackTrace();
+	public JobApplication getApplication(int jobId, int seekerId) {
 
-            return false;
-        }
-    }
+		String sql = """
+				SELECT
+				    application_id,
+				    job_id,
+				    seeker_id,
+				    application_status,
+				    applied_at
+				FROM job_applications
+				WHERE job_id = ?
+				AND seeker_id = ?
+				""";
 
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-    public JobApplication getApplication(
-            int jobId,
-            int seekerId) {
+			ps.setInt(1, jobId);
+			ps.setInt(2, seekerId);
 
-        String sql = """
-                SELECT
-                    application_id,
-                    job_id,
-                    seeker_id,
-                    application_status,
-                    applied_at
-                FROM job_applications
-                WHERE job_id = ?
-                AND seeker_id = ?
-                """;
+			ResultSet rs = ps.executeQuery();
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+			if (rs.next()) {
 
-            ps.setInt(1, jobId);
-            ps.setInt(2, seekerId);
+				JobApplication application = new JobApplication();
 
-            ResultSet rs = ps.executeQuery();
+				application.setApplicationId(rs.getInt("application_id"));
 
-            if (rs.next()) {
+				application.setJobId(rs.getInt("job_id"));
 
-                JobApplication application =
-                        new JobApplication();
+				application.setSeekerId(rs.getInt("seeker_id"));
 
-                application.setApplicationId(
-                        rs.getInt("application_id")
-                );
+				application.setApplicationStatus(rs.getString("application_status"));
 
-                application.setJobId(
-                        rs.getInt("job_id")
-                );
+				application.setAppliedAt(rs.getTimestamp("applied_at"));
 
-                application.setSeekerId(
-                        rs.getInt("seeker_id")
-                );
+				return application;
+			}
 
-                application.setApplicationStatus(
-                        rs.getString("application_status")
-                );
+		} catch (Exception e) {
 
-                application.setAppliedAt(
-                        rs.getTimestamp("applied_at")
-                );
+			e.printStackTrace();
+		}
 
-                return application;
-            }
+		return null;
+	}
 
-        } catch (Exception e) {
+	public List<Integer> getAppliedJobIds(int seekerId) {
 
-            e.printStackTrace();
-        }
+		List<Integer> appliedJobIds = new ArrayList<>();
 
-        return null;
-    }
-    public List<Integer> getAppliedJobIds(int seekerId) {
+		String sql = """
+				SELECT job_id
+				FROM job_applications
+				WHERE seeker_id = ?
+				""";
 
-        List<Integer> appliedJobIds = new ArrayList<>();
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-        String sql = """
-                SELECT job_id
-                FROM job_applications
-                WHERE seeker_id = ?
-                """;
+			ps.setInt(1, seekerId);
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+			ResultSet rs = ps.executeQuery();
 
-            ps.setInt(1, seekerId);
+			while (rs.next()) {
 
-            ResultSet rs = ps.executeQuery();
+				appliedJobIds.add(rs.getInt("job_id"));
+			}
 
-            while (rs.next()) {
+		} catch (Exception e) {
 
-                appliedJobIds.add(
-                    rs.getInt("job_id")
-                );
-            }
+			e.printStackTrace();
+		}
 
-        } catch (Exception e) {
+		return appliedJobIds;
+	}
 
-            e.printStackTrace();
-        }
-
-        return appliedJobIds;
-    }
-    public List<MyApplication> getApplicationsBySeekerId(int seekerId) {
-
-        List<MyApplication> applications = new ArrayList<>();
-
-        String sql = """
-                SELECT
-                    ja.application_id,
-                    ja.job_id,
-                    j.job_title,
-                    j.company_name,
-                    j.location,
-                    j.job_type,
-                    ja.application_status,
-                    ja.applied_at
-                FROM job_applications ja
-                INNER JOIN jobs j
-                    ON ja.job_id = j.job_id
-                WHERE ja.seeker_id = ?
-                ORDER BY ja.applied_at DESC
-                """;
+	public List<MyApplication> getApplicationsBySeekerId(int seekerId) {
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+		List<MyApplication> applications = new ArrayList<>();
 
-            ps.setInt(1, seekerId);
+		String sql = """
+				SELECT
+				    ja.application_id,
+				    ja.job_id,
+				    j.job_title,
+				    j.company_name,
+				    j.location,
+				    j.job_type,
+				    ja.application_status,
+				    ja.applied_at
+				FROM job_applications ja
+				INNER JOIN jobs j
+				    ON ja.job_id = j.job_id
+				WHERE ja.seeker_id = ?
+				ORDER BY ja.applied_at DESC
+				""";
 
-            ResultSet rs = ps.executeQuery();
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-            while (rs.next()) {
+			ps.setInt(1, seekerId);
 
-                MyApplication application = new MyApplication();
+			ResultSet rs = ps.executeQuery();
 
-                application.setApplicationId(
-                    rs.getInt("application_id")
-                );
+			while (rs.next()) {
 
-                application.setJobId(
-                    rs.getInt("job_id")
-                );
+				MyApplication application = new MyApplication();
 
-                application.setJobTitle(
-                    rs.getString("job_title")
-                );
+				application.setApplicationId(rs.getInt("application_id"));
 
-                application.setCompanyName(
-                    rs.getString("company_name")
-                );
+				application.setJobId(rs.getInt("job_id"));
 
-                application.setLocation(
-                    rs.getString("location")
-                );
+				application.setJobTitle(rs.getString("job_title"));
 
-                application.setJobType(
-                    rs.getString("job_type")
-                );
+				application.setCompanyName(rs.getString("company_name"));
 
-                application.setApplicationStatus(
-                    rs.getString("application_status")
-                );
+				application.setLocation(rs.getString("location"));
 
-                application.setAppliedAt(
-                    rs.getTimestamp("applied_at")
-                );
-
-                applications.add(application);
-            }
+				application.setJobType(rs.getString("job_type"));
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-
-        return applications;
-    }
-    public List<Applicant> getApplicantsByJobId(int jobId) {
-
-        List<Applicant> applicants = new ArrayList<>();
+				application.setApplicationStatus(rs.getString("application_status"));
 
-        String sql = """
-                SELECT
-                    ja.application_id,
-                    ja.job_id,
-                    ja.seeker_id,
-                    u.full_name,
-                    u.email,
-                    j.job_title,
-                    ja.application_status,
-                    ja.applied_at
-                FROM job_applications ja
-                JOIN users u
-                    ON ja.seeker_id = u.user_id
-                JOIN jobs j
-                    ON ja.job_id = j.job_id
-                WHERE ja.job_id = ?
-                ORDER BY ja.applied_at DESC
-                """;
+				application.setAppliedAt(rs.getTimestamp("applied_at"));
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+				applications.add(application);
+			}
 
-            ps.setInt(1, jobId);
+		} catch (Exception e) {
 
-            ResultSet rs = ps.executeQuery();
+			e.printStackTrace();
+		}
 
-            while (rs.next()) {
+		return applications;
+	}
 
-                Applicant applicant = new Applicant();
+	public List<Applicant> getApplicantsByJobId(int jobId) {
 
-                applicant.setApplicationId(
-                    rs.getInt("application_id")
-                );
+		List<Applicant> applicants = new ArrayList<>();
 
-                applicant.setJobId(
-                    rs.getInt("job_id")
-                );
+		String sql = """
+				SELECT
+				    ja.application_id,
+				    ja.job_id,
+				    ja.seeker_id,
+				    u.full_name,
+				    u.email,
+				    j.job_title,
+				    ja.application_status,
+				    ja.applied_at
+				FROM job_applications ja
+				JOIN users u
+				    ON ja.seeker_id = u.user_id
+				JOIN jobs j
+				    ON ja.job_id = j.job_id
+				WHERE ja.job_id = ?
+				ORDER BY ja.applied_at DESC
+				""";
 
-                applicant.setSeekerId(
-                    rs.getInt("seeker_id")
-                );
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-                applicant.setSeekerName(
-                    rs.getString("full_name")
-                );
+			ps.setInt(1, jobId);
 
-                applicant.setSeekerEmail(
-                    rs.getString("email")
-                );
+			ResultSet rs = ps.executeQuery();
 
-                applicant.setJobTitle(
-                    rs.getString("job_title")
-                );
+			while (rs.next()) {
 
-                applicant.setApplicationStatus(
-                    rs.getString("application_status")
-                );
+				Applicant applicant = new Applicant();
 
-                applicant.setAppliedAt(
-                    rs.getTimestamp("applied_at")
-                );
+				applicant.setApplicationId(rs.getInt("application_id"));
 
-                applicants.add(applicant);
-            }
+				applicant.setJobId(rs.getInt("job_id"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+				applicant.setSeekerId(rs.getInt("seeker_id"));
 
-        return applicants;
-    }
-    public boolean updateApplicationStatus(
-            int applicationId,
-            int recruiterId,
-            String status) {
+				applicant.setSeekerName(rs.getString("full_name"));
 
-        String sql = """
-                UPDATE job_applications ja
-                SET application_status = ?
-                FROM jobs j
-                WHERE ja.application_id = ?
-                  AND ja.job_id = j.job_id
-                  AND j.recruiter_id = ?
-                """;
+				applicant.setSeekerEmail(rs.getString("email"));
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+				applicant.setJobTitle(rs.getString("job_title"));
 
-            ps.setString(1, status);
-            ps.setInt(2, applicationId);
-            ps.setInt(3, recruiterId);
+				applicant.setApplicationStatus(rs.getString("application_status"));
 
-            return ps.executeUpdate() > 0;
+				applicant.setAppliedAt(rs.getTimestamp("applied_at"));
 
-        } catch (Exception e) {
+				applicants.add(applicant);
+			}
 
-            e.printStackTrace();
-            return false;
-        }
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return applicants;
+	}
+
+	public boolean updateApplicationStatus(int applicationId, int recruiterId, String status) {
+
+		String sql = """
+				UPDATE job_applications ja
+				SET application_status = ?
+				FROM jobs j
+				WHERE ja.application_id = ?
+				  AND ja.job_id = j.job_id
+				  AND j.recruiter_id = ?
+				""";
+
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+			ps.setString(1, status);
+			ps.setInt(2, applicationId);
+			ps.setInt(3, recruiterId);
+
+			return ps.executeUpdate() > 0;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

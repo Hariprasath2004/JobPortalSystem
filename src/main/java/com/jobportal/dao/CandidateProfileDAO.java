@@ -9,137 +9,115 @@ import com.jobportal.util.DBConnection;
 
 public class CandidateProfileDAO {
 
-    public CandidateProfile getProfileByUserId(int userId) {
+	public CandidateProfile getProfileByUserId(int userId) {
 
-        String sql = """
-                SELECT profile_id,
-                       user_id,
-                       phone,
-                       date_of_birth,
-                       gender,
-                       location,
-                       headline,
-                       summary,
-                       resume_path,
-                       profile_completion
-                FROM candidate_profiles
-                WHERE user_id = ?
-                """;
+		String sql = """
+				SELECT profile_id,
+				       user_id,
+				       phone,
+				       date_of_birth,
+				       gender,
+				       location,
+				       headline,
+				       summary,
+				       resume_path,
+				       profile_completion
+				FROM candidate_profiles
+				WHERE user_id = ?
+				""";
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, userId);
+			ps.setInt(1, userId);
 
-            ResultSet rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+			if (rs.next()) {
 
-                CandidateProfile profile = new CandidateProfile();
+				CandidateProfile profile = new CandidateProfile();
 
-                profile.setProfileId(
-                        rs.getInt("profile_id"));
+				profile.setProfileId(rs.getInt("profile_id"));
 
-                profile.setUserId(
-                        rs.getInt("user_id"));
+				profile.setUserId(rs.getInt("user_id"));
 
-                profile.setPhone(
-                        rs.getString("phone"));
+				profile.setPhone(rs.getString("phone"));
 
-                profile.setDateOfBirth(
-                        rs.getString("date_of_birth"));
+				profile.setDateOfBirth(rs.getString("date_of_birth"));
 
-                profile.setGender(
-                        rs.getString("gender"));
+				profile.setGender(rs.getString("gender"));
 
-                profile.setLocation(
-                        rs.getString("location"));
+				profile.setLocation(rs.getString("location"));
 
-                profile.setHeadline(
-                        rs.getString("headline"));
+				profile.setHeadline(rs.getString("headline"));
 
-                profile.setSummary(
-                        rs.getString("summary"));
+				profile.setSummary(rs.getString("summary"));
 
-                profile.setResumePath(
-                        rs.getString("resume_path"));
+				profile.setResumePath(rs.getString("resume_path"));
 
-                profile.setProfileCompletion(
-                        rs.getInt("profile_completion"));
+				profile.setProfileCompletion(rs.getInt("profile_completion"));
 
-                return profile;
-            }
+				return profile;
+			}
 
-        } catch (Exception e) {
+		} catch (Exception e) {
 
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		}
 
-        return null;
-    }
-    public boolean saveProfile(CandidateProfile profile) {
+		return null;
+	}
 
-        String sql = """
-                INSERT INTO candidate_profiles
-                (user_id, phone, date_of_birth, gender, location,
-                 headline, summary, resume_path, profile_completion)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT (user_id)
-                DO UPDATE SET
-                    phone = EXCLUDED.phone,
-                    date_of_birth = EXCLUDED.date_of_birth,
-                    gender = EXCLUDED.gender,
-                    location = EXCLUDED.location,
-                    headline = EXCLUDED.headline,
-                    summary = EXCLUDED.summary,
-                    resume_path = EXCLUDED.resume_path,
-                    profile_completion = EXCLUDED.profile_completion
-                """;
+	public boolean saveProfile(CandidateProfile profile) {
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+		String sql = """
+				INSERT INTO candidate_profiles
+				(user_id, phone, date_of_birth, gender, location,
+				 headline, summary, resume_path, profile_completion)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+				ON CONFLICT (user_id)
+				DO UPDATE SET
+				    phone = EXCLUDED.phone,
+				    date_of_birth = EXCLUDED.date_of_birth,
+				    gender = EXCLUDED.gender,
+				    location = EXCLUDED.location,
+				    headline = EXCLUDED.headline,
+				    summary = EXCLUDED.summary,
+				    resume_path = EXCLUDED.resume_path,
+				    profile_completion = EXCLUDED.profile_completion
+				""";
 
-            ps.setInt(1, profile.getUserId());
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(2, profile.getPhone());
+			ps.setInt(1, profile.getUserId());
 
-            // Date of Birth
-            if (profile.getDateOfBirth() != null
-                    && !profile.getDateOfBirth().isEmpty()) {
+			ps.setString(2, profile.getPhone());
 
-                ps.setDate(
-                    3,
-                    java.sql.Date.valueOf(profile.getDateOfBirth())
-                );
+			// Date of Birth
+			if (profile.getDateOfBirth() != null && !profile.getDateOfBirth().isEmpty()) {
 
-            } else {
+				ps.setDate(3, java.sql.Date.valueOf(profile.getDateOfBirth()));
 
-                ps.setNull(
-                    3,
-                    java.sql.Types.DATE
-                );
-            }
+			} else {
 
-            ps.setString(4, profile.getGender());
-            ps.setString(5, profile.getLocation());
-            ps.setString(6, profile.getHeadline());
-            ps.setString(7, profile.getSummary());
-            ps.setString(8, profile.getResumePath());
-            ps.setInt(9, profile.getProfileCompletion());
+				ps.setNull(3, java.sql.Types.DATE);
+			}
 
-            int rowsAffected = ps.executeUpdate();
+			ps.setString(4, profile.getGender());
+			ps.setString(5, profile.getLocation());
+			ps.setString(6, profile.getHeadline());
+			ps.setString(7, profile.getSummary());
+			ps.setString(8, profile.getResumePath());
+			ps.setInt(9, profile.getProfileCompletion());
 
-            return rowsAffected > 0;
+			int rowsAffected = ps.executeUpdate();
 
-        } catch (Exception e) {
+			return rowsAffected > 0;
 
-            e.printStackTrace();
+		} catch (Exception e) {
 
-            return false;
-        }
-    }
+			e.printStackTrace();
+
+			return false;
+		}
+	}
 }

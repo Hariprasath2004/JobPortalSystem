@@ -1,227 +1,188 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Manage Jobs - JobPortal</title>
+<meta charset="UTF-8">
+<title>Manage Jobs - JobPortal</title>
 
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
-    <div class="navbar">
+	<!-- Navigation Bar -->
+	<div class="navbar">
 
-        <div class="logo">
-            JobPortal
-        </div>
+		<div class="logo">JobPortal</div>
 
-        <div class="nav-links">
+		<div class="nav-links">
 
-            <a href="recruiterDashboard">
-                Dashboard
-            </a>
+			<a href="recruiterDashboard"> Dashboard </a> <a href="companyProfile">
+				Company Profile </a> <a href="postJob"> Post Job </a> <a
+				href="manageJobs"> Manage Jobs </a> <a href="viewApplicants">
+				Applicants </a> <a href="Logout"> Logout </a>
 
-            <a href="companyProfile">
-                Company Profile
-            </a>
+		</div>
 
-            <a href="postJob">
-                Post Job
-            </a>
+	</div>
 
-            <a href="manageJobs">
-                Manage Jobs
-            </a>
 
-            <a href="viewApplicants">
-                Applicants
-            </a>
+	<!-- Main Container -->
+	<div class="container">
 
-            <a href="Logout">
-                Logout
-            </a>
+		<div class="page-header">
 
-        </div>
+			<h1>Manage Jobs</h1>
 
-    </div>
+			<p>View, manage and track the jobs you have posted.</p>
 
+		</div>
 
-    <!-- Main Container -->
-    <div class="container">
 
-        <div class="page-header">
+		<!-- Error Messages -->
+		<s:actionerror />
 
-            <h1>Manage Jobs</h1>
 
-            <p>
-                View, manage and track the jobs you have posted.
-            </p>
+		<!-- Jobs List -->
+		<s:if test="jobs != null && !jobs.isEmpty()">
 
-        </div>
+			<div class="job-list">
 
+				<s:iterator value="jobs">
 
-        <!-- Error Messages -->
-        <s:actionerror />
+					<div class="card job-card">
 
+						<!-- Job Title -->
+						<h2 class="job-title">
+							<s:property value="jobTitle" />
+						</h2>
 
-        <!-- Jobs List -->
-        <s:if test="jobs != null && !jobs.isEmpty()">
 
-            <div class="job-list">
+						<!-- Job Information -->
+						<div class="job-info">
 
-                <s:iterator value="jobs">
+							<p>
+								<strong>Company:</strong>
+								<s:property value="companyName" />
+							</p>
 
-                    <div class="card job-card">
+							<p>
+								<strong>Location:</strong>
+								<s:property value="location" />
+							</p>
 
-                        <!-- Job Title -->
-                        <h2 class="job-title">
-                            <s:property value="jobTitle" />
-                        </h2>
+							<p>
+								<strong>Job Type:</strong>
+								<s:property value="jobType" />
+							</p>
 
+							<p>
+								<strong>Experience:</strong>
+								<s:property value="experienceRequired" />
+							</p>
 
-                        <!-- Job Information -->
-                        <div class="job-info">
+							<p>
+								<strong>Required Skills:</strong>
+								<s:property value="requiredSkills" />
+							</p>
 
-                            <p>
-                                <strong>Company:</strong>
-                                <s:property value="companyName" />
-                            </p>
+							<p>
+								<strong>Salary:</strong> ₹
+								<s:property value="salaryMin" />
+								- ₹
+								<s:property value="salaryMax" />
+							</p>
 
-                            <p>
-                                <strong>Location:</strong>
-                                <s:property value="location" />
-                            </p>
+							<p>
+								<strong>Posted On:</strong>
+								<s:property value="createdAt" />
+							</p>
 
-                            <p>
-                                <strong>Job Type:</strong>
-                                <s:property value="jobType" />
-                            </p>
+						</div>
 
-                            <p>
-                                <strong>Experience:</strong>
-                                <s:property value="experienceRequired" />
-                            </p>
 
-                            <p>
-                                <strong>Required Skills:</strong>
-                                <s:property value="requiredSkills" />
-                            </p>
+						<!-- Job Description -->
+						<div class="description-box">
 
-                            <p>
-                                <strong>Salary:</strong>
-                                ₹<s:property value="salaryMin" />
-                                -
-                                ₹<s:property value="salaryMax" />
-                            </p>
+							<h3>Job Description</h3>
 
-                            <p>
-                                <strong>Posted On:</strong>
-                                <s:property value="createdAt" />
-                            </p>
+							<p>
+								<s:property value="jobDescription" />
+							</p>
 
-                        </div>
+						</div>
 
 
-                        <!-- Job Description -->
-                        <div class="description-box">
+						<!-- Actions -->
+						<div class="job-actions">
 
-                            <h3>Job Description</h3>
+							<!-- View Applicants -->
+							<form action="viewApplicants" method="get">
 
-                            <p>
-                                <s:property value="jobDescription" />
-                            </p>
+								<input type="hidden" name="jobId"
+									value="<s:property value='jobId' />">
 
-                        </div>
+								<button type="submit" class="btn btn-primary">View
+									Applicants</button>
 
+							</form>
 
-                        <!-- Actions -->
-                        <div class="job-actions">
 
-                            <!-- View Applicants -->
-                            <form action="viewApplicants" method="get">
+							<!-- Delete Job -->
+							<form action="deleteJob" method="post"
+								onsubmit="return confirm('Are you sure you want to delete this job?');">
 
-                                <input type="hidden"
-                                       name="jobId"
-                                       value="<s:property value='jobId' />">
+								<input type="hidden" name="jobId"
+									value="<s:property value='jobId' />">
 
-                                <button type="submit"
-                                        class="btn btn-primary">
-                                    View Applicants
-                                </button>
+								<button type="submit" class="btn btn-danger">Delete Job
+								</button>
 
-                            </form>
+							</form>
 
+						</div>
 
-                            <!-- Delete Job -->
-                            <form action="deleteJob"
-                                  method="post"
-                                  onsubmit="return confirm('Are you sure you want to delete this job?');">
+					</div>
 
-                                <input type="hidden"
-                                       name="jobId"
-                                       value="<s:property value='jobId' />">
+				</s:iterator>
 
-                                <button type="submit"
-                                        class="btn btn-danger">
-                                    Delete Job
-                                </button>
+			</div>
 
-                            </form>
+		</s:if>
 
-                        </div>
 
-                    </div>
+		<!-- No Jobs -->
+		<s:else>
 
-                </s:iterator>
+			<div class="card empty-state">
 
-            </div>
+				<h2>No Jobs Posted</h2>
 
-        </s:if>
+				<p>You have not posted any jobs yet.</p>
 
+				<a href="postJob" class="btn btn-primary"> Post Your First Job </a>
 
-        <!-- No Jobs -->
-        <s:else>
+			</div>
 
-            <div class="card empty-state">
+		</s:else>
 
-                <h2>No Jobs Posted</h2>
 
-                <p>
-                    You have not posted any jobs yet.
-                </p>
+		<!-- Bottom Navigation -->
+		<div class="bottom-actions">
 
-                <a href="postJob" class="btn btn-primary">
-                    Post Your First Job
-                </a>
+			<a href="postJob" class="btn btn-primary"> + Post New Job </a> <a
+				href="recruiterDashboard" class="btn btn-secondary"> Back to
+				Dashboard </a>
 
-            </div>
+		</div>
 
-        </s:else>
-
-
-        <!-- Bottom Navigation -->
-        <div class="bottom-actions">
-
-            <a href="postJob" class="btn btn-primary">
-                + Post New Job
-            </a>
-
-            <a href="recruiterDashboard" class="btn btn-secondary">
-                Back to Dashboard
-            </a>
-
-        </div>
-
-    </div>
+	</div>
 
 </body>
 </html>

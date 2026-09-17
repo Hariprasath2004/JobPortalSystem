@@ -13,48 +13,42 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class ManageJobsAction extends ActionSupport {
 
-    private List<Job> jobs;
+	private List<Job> jobs;
 
-    public String execute() {
+	public String execute() {
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpSession session =
-                request.getSession(false);
+		HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            return "login";
-        }
+		if (session == null) {
+			return "login";
+		}
 
-        Integer userId =
-                (Integer) session.getAttribute("userId");
+		Integer userId = (Integer) session.getAttribute("userId");
 
-        String role =
-                (String) session.getAttribute("role");
+		String role = (String) session.getAttribute("role");
 
-        if (userId == null) {
-            return "login";
-        }
+		if (userId == null) {
+			return "login";
+		}
 
-        if (!"EMPLOYER".equalsIgnoreCase(role)) {
-            return "login";
-        }
+		if (!"EMPLOYER".equalsIgnoreCase(role)) {
+			return "login";
+		}
 
-        JobDAO dao = new JobDAO();
+		JobDAO dao = new JobDAO();
 
-        jobs = dao.getJobsByRecruiterId(userId);
+		jobs = dao.getJobsByRecruiterId(userId);
 
-        return SUCCESS;
-    }
+		return SUCCESS;
+	}
 
+	public List<Job> getJobs() {
+		return jobs;
+	}
 
-    public List<Job> getJobs() {
-        return jobs;
-    }
-
-
-    public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
-    }
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
+	}
 }

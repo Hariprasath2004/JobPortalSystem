@@ -1,8 +1,7 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 
@@ -10,161 +9,111 @@
 
 <head>
 
-    <title>My Experience</title>
+<title>My Experience</title>
 
 </head>
 
 <body>
 
-    <h1>My Experience</h1>
+	<h1>My Experience</h1>
 
-    <s:actionerror />
+	<s:actionerror />
 
-    <p>
-        Logged-in User ID:
-        ${sessionScope.userId}
-    </p>
+	<p>Logged-in User ID: ${sessionScope.userId}</p>
 
-    <hr>
+	<hr>
 
-    <h2>Add Experience</h2>
+	<h2>Add Experience</h2>
 
-    <form action="experience" method="post">
+	<form action="experience" method="post">
 
-        <label>Job Title:</label>
+		<label>Job Title:</label> <input type="text"
+			name="experience.jobTitle" required> <br>
+		<br> <label>Company Name:</label> <input type="text"
+			name="experience.companyName" required> <br>
+		<br> <label>Location:</label> <input type="text"
+			name="experience.location"> <br>
+		<br> <label>Start Date:</label> <input type="date"
+			name="experience.startDate"> <br>
+		<br> <label>End Date:</label> <input type="date"
+			name="experience.endDate"> <br>
+		<br> <label> <input type="checkbox"
+			name="experience.currentlyWorking" value="true"> I currently
+			work here
+		</label> <br>
+		<br> <label>Description:</label> <br>
 
-        <input type="text"
-               name="experience.jobTitle"
-               required>
+		<textarea name="experience.description" rows="6" cols="60"></textarea>
 
-        <br><br>
-
-
-        <label>Company Name:</label>
-
-        <input type="text"
-               name="experience.companyName"
-               required>
-
-        <br><br>
-
-
-        <label>Location:</label>
-
-        <input type="text"
-               name="experience.location">
-
-        <br><br>
+		<br>
+		<br>
 
 
-        <label>Start Date:</label>
+		<button type="submit">Save Experience</button>
 
-        <input type="date"
-               name="experience.startDate">
+	</form>
 
-        <br><br>
+	<hr>
 
+	<h2>My Experiences</h2>
 
-        <label>End Date:</label>
+	<s:if test="experiences != null && !experiences.isEmpty()">
 
-        <input type="date"
-               name="experience.endDate">
+		<s:iterator value="experiences">
 
-        <br><br>
+			<div>
 
+				<h3>
+					<s:property value="jobTitle" />
+				</h3>
 
-        <label>
-            <input type="checkbox"
-                   name="experience.currentlyWorking"
-                   value="true">
+				<p>
+					<strong>Company:</strong>
+					<s:property value="companyName" />
+				</p>
 
-            I currently work here
-        </label>
+				<p>
+					<strong>Location:</strong>
+					<s:property value="location" />
+				</p>
 
-        <br><br>
+				<p>
+					<strong>Start Date:</strong>
+					<s:property value="startDate" />
+				</p>
 
-
-        <label>Description:</label>
-
-        <br>
-
-        <textarea name="experience.description"
-                  rows="6"
-                  cols="60"></textarea>
-
-        <br><br>
-
-
-        <button type="submit">
-            Save Experience
-        </button>
-
-    </form>
-
-    <hr>
-
-    <h2>My Experiences</h2>
-
-    <s:if test="experiences != null && !experiences.isEmpty()">
-
-        <s:iterator value="experiences">
-
-            <div>
-
-                <h3>
-                    <s:property value="jobTitle"/>
-                </h3>
-
-                <p>
-                    <strong>Company:</strong>
-                    <s:property value="companyName"/>
-                </p>
-
-                <p>
-                    <strong>Location:</strong>
-                    <s:property value="location"/>
-                </p>
-
-                <p>
-                    <strong>Start Date:</strong>
-                    <s:property value="startDate"/>
-                </p>
-
-                <p>
-                    <strong>End Date:</strong>
-                    <s:if test="currentlyWorking">
+				<p>
+					<strong>End Date:</strong>
+					<s:if test="currentlyWorking">
                         Present
                     </s:if>
-                    <s:else>
-                        <s:property value="endDate"/>
-                    </s:else>
-                </p>
+					<s:else>
+						<s:property value="endDate" />
+					</s:else>
+				</p>
 
-                <p>
-                    <strong>Description:</strong>
-                    <br>
-                    <s:property value="description"/>
-                </p>
+				<p>
+					<strong>Description:</strong> <br>
+					<s:property value="description" />
+				</p>
 
-            </div>
+			</div>
 
-            <hr>
+			<hr>
 
-        </s:iterator>
+		</s:iterator>
 
-    </s:if>
+	</s:if>
 
-    <s:else>
+	<s:else>
 
-        <p>No experience added yet.</p>
+		<p>No experience added yet.</p>
 
-    </s:else>
+	</s:else>
 
-    <br>
+	<br>
 
-    <a href="seekerDashboard">
-        Back to Dashboard
-    </a>
+	<a href="seekerDashboard"> Back to Dashboard </a>
 
 </body>
 

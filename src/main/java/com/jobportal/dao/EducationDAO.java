@@ -8,37 +8,34 @@ import com.jobportal.util.DBConnection;
 
 public class EducationDAO {
 
-    public boolean saveEducation(Education education) {
+	public boolean saveEducation(Education education) {
 
-        String sql = """
-                INSERT INTO education
-                (user_id, degree, institution, specialization,
-                 start_year, end_year, grade)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """;
+		String sql = """
+				INSERT INTO education
+				(user_id, degree, institution, specialization,
+				 start_year, end_year, grade)
+				VALUES (?, ?, ?, ?, ?, ?, ?)
+				""";
 
-        try (
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)
-        ) {
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, education.getUserId());
-            ps.setString(2, education.getDegree());
-            ps.setString(3, education.getInstitution());
-            ps.setString(4, education.getSpecialization());
-            ps.setInt(5, education.getStartYear());
-            ps.setInt(6, education.getEndYear());
-            ps.setString(7, education.getGrade());
+			ps.setInt(1, education.getUserId());
+			ps.setString(2, education.getDegree());
+			ps.setString(3, education.getInstitution());
+			ps.setString(4, education.getSpecialization());
+			ps.setInt(5, education.getStartYear());
+			ps.setInt(6, education.getEndYear());
+			ps.setString(7, education.getGrade());
 
-            int rowsInserted = ps.executeUpdate();
+			int rowsInserted = ps.executeUpdate();
 
-            return rowsInserted > 0;
+			return rowsInserted > 0;
 
-        } catch (Exception e) {
+		} catch (Exception e) {
 
-            e.printStackTrace();
+			e.printStackTrace();
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 }

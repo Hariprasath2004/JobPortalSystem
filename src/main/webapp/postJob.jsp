@@ -1,308 +1,203 @@
-<%@ page language="java"
-    contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 <html>
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <title>Post Job - JobPortal</title>
+<title>Post Job - JobPortal</title>
 
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/style.css">
 
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+	<!-- ================= NAVBAR ================= -->
 
-    <div class="navbar">
+	<div class="navbar">
 
-        <div class="logo">
-            JobPortal
-        </div>
+		<div class="logo">JobPortal</div>
 
-        <div class="nav-links">
+		<div class="nav-links">
 
-            <a href="recruiterDashboard">
-                Dashboard
-            </a>
+			<a href="recruiterDashboard"> Dashboard </a> <a href="companyProfile">
+				Company Profile </a> <a href="postJob"> Post Job </a> <a
+				href="manageJobs"> Manage Jobs </a> <a href="viewApplicants">
+				Applicants </a> <a href="logout"> Logout </a>
 
-            <a href="companyProfile">
-                Company Profile
-            </a>
+		</div>
 
-            <a href="postJob">
-                Post Job
-            </a>
+	</div>
 
-            <a href="manageJobs">
-                Manage Jobs
-            </a>
 
-            <a href="viewApplicants">
-                Applicants
-            </a>
+	<!-- ================= MAIN CONTENT ================= -->
 
-            <a href="logout">
-                Logout
-            </a>
+	<div class="container">
 
-        </div>
+		<div class="page-header">
 
-    </div>
+			<h1>Post a New Job</h1>
 
+			<p>Create a new job opportunity and find the right candidate.</p>
 
-    <!-- ================= MAIN CONTENT ================= -->
+		</div>
 
-    <div class="container">
 
-        <div class="page-header">
+		<!-- ================= ERROR MESSAGE ================= -->
 
-            <h1>Post a New Job</h1>
+		<s:actionerror />
 
-            <p>
-                Create a new job opportunity and find the right candidate.
-            </p>
 
-        </div>
+		<!-- ================= POST JOB FORM ================= -->
 
+		<div class="form-card">
 
-        <!-- ================= ERROR MESSAGE ================= -->
+			<h2>Job Details</h2>
 
-        <s:actionerror />
+			<form action="postJob" method="post">
 
+				<!-- Job Title -->
 
-        <!-- ================= POST JOB FORM ================= -->
+				<div class="form-group">
 
-        <div class="form-card">
+					<label for="jobTitle"> Job Title </label> <input type="text"
+						id="jobTitle" name="job.jobTitle"
+						placeholder="e.g. Java Developer" required>
 
-            <h2>Job Details</h2>
+				</div>
 
-            <form action="postJob" method="post">
 
-                <!-- Job Title -->
+				<!-- Company Name -->
 
-                <div class="form-group">
+				<div class="form-group">
 
-                    <label for="jobTitle">
-                        Job Title
-                    </label>
+					<label for="companyName"> Company Name </label> <input type="text"
+						id="companyName" name="job.companyName"
+						placeholder="Enter company name" required>
 
-                    <input
-                        type="text"
-                        id="jobTitle"
-                        name="job.jobTitle"
-                        placeholder="e.g. Java Developer"
-                        required>
+				</div>
 
-                </div>
 
+				<!-- Job Description -->
 
-                <!-- Company Name -->
+				<div class="form-group">
 
-                <div class="form-group">
+					<label for="jobDescription"> Job Description </label>
 
-                    <label for="companyName">
-                        Company Name
-                    </label>
+					<textarea id="jobDescription" name="job.jobDescription" rows="6"
+						placeholder="Describe the role, responsibilities and requirements..."
+						required></textarea>
 
-                    <input
-                        type="text"
-                        id="companyName"
-                        name="job.companyName"
-                        placeholder="Enter company name"
-                        required>
+				</div>
 
-                </div>
 
+				<!-- Required Skills -->
 
-                <!-- Job Description -->
+				<div class="form-group">
 
-                <div class="form-group">
+					<label for="requiredSkills"> Required Skills </label> <input
+						type="text" id="requiredSkills" name="job.requiredSkills"
+						placeholder="Java, SQL, Spring" required>
 
-                    <label for="jobDescription">
-                        Job Description
-                    </label>
+				</div>
 
-                    <textarea
-                        id="jobDescription"
-                        name="job.jobDescription"
-                        rows="6"
-                        placeholder="Describe the role, responsibilities and requirements..."
-                        required></textarea>
 
-                </div>
+				<!-- Location -->
 
+				<div class="form-group">
 
-                <!-- Required Skills -->
+					<label for="location"> Location </label> <input type="text"
+						id="location" name="job.location" placeholder="Chennai" required>
 
-                <div class="form-group">
+				</div>
 
-                    <label for="requiredSkills">
-                        Required Skills
-                    </label>
 
-                    <input
-                        type="text"
-                        id="requiredSkills"
-                        name="job.requiredSkills"
-                        placeholder="Java, SQL, Spring"
-                        required>
+				<!-- Job Type -->
 
-                </div>
+				<div class="form-group">
 
+					<label for="jobType"> Job Type </label> <select id="jobType"
+						name="job.jobType" required>
 
-                <!-- Location -->
+						<option value="">Select Job Type</option>
 
-                <div class="form-group">
+						<option value="Full Time">Full Time</option>
 
-                    <label for="location">
-                        Location
-                    </label>
+						<option value="Part Time">Part Time</option>
 
-                    <input
-                        type="text"
-                        id="location"
-                        name="job.location"
-                        placeholder="Chennai"
-                        required>
+						<option value="Internship">Internship</option>
 
-                </div>
+						<option value="Contract">Contract</option>
 
+					</select>
 
-                <!-- Job Type -->
+				</div>
 
-                <div class="form-group">
 
-                    <label for="jobType">
-                        Job Type
-                    </label>
+				<!-- Experience -->
 
-                    <select
-                        id="jobType"
-                        name="job.jobType"
-                        required>
+				<div class="form-group">
 
-                        <option value="">
-                            Select Job Type
-                        </option>
+					<label for="experienceRequired"> Experience Required </label> <input
+						type="text" id="experienceRequired" name="job.experienceRequired"
+						placeholder="0-2 years" required>
 
-                        <option value="Full Time">
-                            Full Time
-                        </option>
+				</div>
 
-                        <option value="Part Time">
-                            Part Time
-                        </option>
 
-                        <option value="Internship">
-                            Internship
-                        </option>
+				<!-- Salary -->
 
-                        <option value="Contract">
-                            Contract
-                        </option>
+				<div class="form-row">
 
-                    </select>
+					<div class="form-group">
 
-                </div>
+						<label for="salaryMin"> Minimum Salary </label> <input
+							type="number" id="salaryMin" name="job.salaryMin" step="0.01"
+							min="0" placeholder="15000">
 
+					</div>
 
-                <!-- Experience -->
 
-                <div class="form-group">
+					<div class="form-group">
 
-                    <label for="experienceRequired">
-                        Experience Required
-                    </label>
+						<label for="salaryMax"> Maximum Salary </label> <input
+							type="number" id="salaryMax" name="job.salaryMax" step="0.01"
+							min="0" placeholder="30000">
 
-                    <input
-                        type="text"
-                        id="experienceRequired"
-                        name="job.experienceRequired"
-                        placeholder="0-2 years"
-                        required>
+					</div>
 
-                </div>
+				</div>
 
 
-                <!-- Salary -->
+				<!-- Submit -->
 
-                <div class="form-row">
+				<div class="form-actions">
 
-                    <div class="form-group">
+					<button type="submit" class="btn-primary">Post Job</button>
 
-                        <label for="salaryMin">
-                            Minimum Salary
-                        </label>
+				</div>
 
-                        <input
-                            type="number"
-                            id="salaryMin"
-                            name="job.salaryMin"
-                            step="0.01"
-                            min="0"
-                            placeholder="15000">
+			</form>
 
-                    </div>
+		</div>
 
 
-                    <div class="form-group">
+		<!-- ================= BACK ================= -->
 
-                        <label for="salaryMax">
-                            Maximum Salary
-                        </label>
+		<div class="back-link">
 
-                        <input
-                            type="number"
-                            id="salaryMax"
-                            name="job.salaryMax"
-                            step="0.01"
-                            min="0"
-                            placeholder="30000">
+			<a href="recruiterDashboard"> ← Back to Dashboard </a>
 
-                    </div>
+		</div>
 
-                </div>
-
-
-                <!-- Submit -->
-
-                <div class="form-actions">
-
-                    <button
-                        type="submit"
-                        class="btn-primary">
-
-                        Post Job
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-
-        <!-- ================= BACK ================= -->
-
-        <div class="back-link">
-
-            <a href="recruiterDashboard">
-                ← Back to Dashboard
-            </a>
-
-        </div>
-
-    </div>
+	</div>
 
 </body>
 

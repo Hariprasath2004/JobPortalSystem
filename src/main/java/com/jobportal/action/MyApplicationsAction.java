@@ -13,70 +13,52 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class MyApplicationsAction extends ActionSupport {
 
-    private List<MyApplication> applications;
+	private List<MyApplication> applications;
 
+	@Override
+	public String execute() {
 
-    @Override
-    public String execute() {
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpSession session = request.getSession(false);
 
-        HttpSession session =
-                request.getSession(false);
+		// Check login
+		if (session == null) {
+			return "login";
+		}
 
+		// Get logged-in user
+		Integer seekerId = (Integer) session.getAttribute("userId");
 
-        // Check login
-        if (session == null) {
-            return "login";
-        }
+		if (seekerId == null) {
+			return "login";
+		}
 
+		// Only job seekers can view applications
+		String role = (String) session.getAttribute("role");
 
-        // Get logged-in user
-        Integer seekerId =
-                (Integer) session.getAttribute("userId");
+		if (!"USER".equalsIgnoreCase(role) && !"SEEKER".equalsIgnoreCase(role)
+				&& !"JOB_SEEKER".equalsIgnoreCase(role)) {
 
-        if (seekerId == null) {
-            return "login";
-        }
+			addActionError("Only job seekers can view applications.");
 
+			return ERROR;
+		}
 
-        // Only job seekers can view applications
-        String role =
-                (String) session.getAttribute("role");
+		// Get applications
+		JobApplicationDAO dao = new JobApplicationDAO();
 
-        if (!"USER".equalsIgnoreCase(role)
-                && !"SEEKER".equalsIgnoreCase(role)
-                && !"JOB_SEEKER".equalsIgnoreCase(role)) {
+		applications = dao.getApplicationsBySeekerId(seekerId);
 
-            addActionError(
-                "Only job seekers can view applications."
-            );
+		return SUCCESS;
+	}
 
-            return ERROR;
-        }
+	public List<MyApplication> getApplications() {
+		return applications;
+	}
 
+	public void setApplications(List<MyApplication> applications) {
 
-        // Get applications
-        JobApplicationDAO dao =
-                new JobApplicationDAO();
-
-        applications =
-                dao.getApplicationsBySeekerId(seekerId);
-
-
-        return SUCCESS;
-    }
-
-
-    public List<MyApplication> getApplications() {
-        return applications;
-    }
-
-
-    public void setApplications(
-            List<MyApplication> applications) {
-
-        this.applications = applications;
-    }
+		this.applications = applications;
+	}
 }

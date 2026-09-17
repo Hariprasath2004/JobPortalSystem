@@ -14,112 +14,90 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class JobSearchAction extends ActionSupport {
 
-    private List<Job> jobs;
+	private List<Job> jobs;
 
-    private List<Integer> appliedJobIds;
+	private List<Integer> appliedJobIds;
 
+	@Override
+	public String execute() {
 
-    @Override
-    public String execute() {
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpSession session = request.getSession(false);
 
-        HttpSession session =
-                request.getSession(false);
+		// Check login
+		if (session == null) {
+			return "login";
+		}
 
-        // Check login
-        if (session == null) {
-            return "login";
-        }
+		Integer userId = (Integer) session.getAttribute("userId");
 
-        Integer userId =
-                (Integer) session.getAttribute("userId");
+		if (userId == null) {
+			return "login";
+		}
 
-        if (userId == null) {
-            return "login";
-        }
+		// Check role
+		String role = (String) session.getAttribute("role");
 
-        // Check role
-        String role =
-                (String) session.getAttribute("role");
+		if (!"JOB_SEEKER".equalsIgnoreCase(role) && !"USER".equalsIgnoreCase(role)
+				&& !"SEEKER".equalsIgnoreCase(role)) {
 
-        if (!"JOB_SEEKER".equalsIgnoreCase(role)
-                && !"USER".equalsIgnoreCase(role)
-                && !"SEEKER".equalsIgnoreCase(role)) {
+			addActionError("Only job seekers can search jobs.");
 
-            addActionError(
-                "Only job seekers can search jobs."
-            );
+			return ERROR;
+		}
 
-            return ERROR;
-        }
+		// Load all jobs
+		JobDAO jobDAO = new JobDAO();
 
+		jobs = jobDAO.getAllJobs();
 
-        // Load all jobs
-        JobDAO jobDAO = new JobDAO();
+		// Load jobs already applied by this seeker
+		JobApplicationDAO applicationDAO = new JobApplicationDAO();
 
-        jobs = jobDAO.getAllJobs();
+		appliedJobIds = applicationDAO.getAppliedJobIds(userId);
 
+		/*
+		 * Read success message from session
+		 */
+		String successMessage = (String) session.getAttribute("applicationSuccess");
 
-        // Load jobs already applied by this seeker
-        JobApplicationDAO applicationDAO =
-                new JobApplicationDAO();
+		if (successMessage != null) {
 
-        appliedJobIds =
-                applicationDAO.getAppliedJobIds(userId);
+			addActionMessage(successMessage);
 
+			session.removeAttribute("applicationSuccess");
+		}
 
-        /*
-         * Read success message from session
-         */
-        String successMessage =
-                (String) session.getAttribute("applicationSuccess");
+		/*
+		 * Read error message from session
+		 */
+		String errorMessage = (String) session.getAttribute("applicationError");
 
-        if (successMessage != null) {
+		if (errorMessage != null) {
 
-            addActionMessage(successMessage);
+			addActionError(errorMessage);
 
-            session.removeAttribute("applicationSuccess");
-        }
+			session.removeAttribute("applicationError");
+		}
 
+		return SUCCESS;
+	}
 
-        /*
-         * Read error message from session
-         */
-        String errorMessage =
-                (String) session.getAttribute("applicationError");
+	public List<Job> getJobs() {
+		return jobs;
+	}
 
-        if (errorMessage != null) {
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
+	}
 
-            addActionError(errorMessage);
+	public List<Integer> getAppliedJobIds() {
+		return appliedJobIds;
+	}
 
-            session.removeAttribute("applicationError");
-        }
+	public void setAppliedJobIds(List<Integer> appliedJobIds) {
 
-
-        return SUCCESS;
-    }
-
-
-    public List<Job> getJobs() {
-        return jobs;
-    }
-
-
-    public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
-    }
-
-
-    public List<Integer> getAppliedJobIds() {
-        return appliedJobIds;
-    }
-
-
-    public void setAppliedJobIds(
-            List<Integer> appliedJobIds) {
-
-        this.appliedJobIds = appliedJobIds;
-    }
+		this.appliedJobIds = appliedJobIds;
+	}
 }

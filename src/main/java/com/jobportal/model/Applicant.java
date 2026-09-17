@@ -4,91 +4,83 @@ import java.sql.Timestamp;
 
 public class Applicant {
 
-    private int applicationId;
+	private int applicationId;
 
-    private int jobId;
+	private int jobId;
 
-    private int seekerId;
+	private int seekerId;
 
-    private String seekerName;
+	private String seekerName;
 
-    private String seekerEmail;
+	private String seekerEmail;
 
-    private String jobTitle;
+	private String jobTitle;
 
-    private String applicationStatus;
+	private String applicationStatus;
 
-    private Timestamp appliedAt;
+	private Timestamp appliedAt;
 
+	public int getApplicationId() {
+		return applicationId;
+	}
 
-    public int getApplicationId() {
-        return applicationId;
-    }
+	public void setApplicationId(int applicationId) {
+		this.applicationId = applicationId;
+	}
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
-    }
+	public int getJobId() {
+		return jobId;
+	}
 
+	public void setJobId(int jobId) {
+		this.jobId = jobId;
+	}
 
-    public int getJobId() {
-        return jobId;
-    }
+	public int getSeekerId() {
+		return seekerId;
+	}
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
+	public void setSeekerId(int seekerId) {
+		this.seekerId = seekerId;
+	}
 
+	public String getSeekerName() {
+		return seekerName;
+	}
 
-    public int getSeekerId() {
-        return seekerId;
-    }
+	public void setSeekerName(String seekerName) {
+		this.seekerName = seekerName;
+	}
 
-    public void setSeekerId(int seekerId) {
-        this.seekerId = seekerId;
-    }
+	public String getSeekerEmail() {
+		return seekerEmail;
+	}
 
+	public void setSeekerEmail(String seekerEmail) {
+		this.seekerEmail = seekerEmail;
+	}
 
-    public String getSeekerName() {
-        return seekerName;
-    }
+	public String getJobTitle() {
+		return jobTitle;
+	}
 
-    public void setSeekerName(String seekerName) {
-        this.seekerName = seekerName;
-    }
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
 
+	public String getApplicationStatus() {
+		return applicationStatus;
+	}
 
-    public String getSeekerEmail() {
-        return seekerEmail;
-    }
+	public void setApplicationStatus(String applicationStatus) {
+		this.applicationStatus = applicationStatus;
+	}
 
-    public void setSeekerEmail(String seekerEmail) {
-        this.seekerEmail = seekerEmail;
-    }
+	public Timestamp getAppliedAt() {
+		return appliedAt;
+	}
 
-
-    public String getJobTitle() {
-        return jobTitle;
-    }
-
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
-
-
-    public String getApplicationStatus() {
-        return applicationStatus;
-    }
-
-    public void setApplicationStatus(String applicationStatus) {
-        this.applicationStatus = applicationStatus;
-    }
-
-
-    public Timestamp getAppliedAt() {
-        return appliedAt;
-    }
-
-    public void setAppliedAt(Timestamp appliedAt) {
-        this.appliedAt = appliedAt;
-    }
+	public void setAppliedAt(Timestamp appliedAt) {
+		this.appliedAt = appliedAt;
+	}
 }

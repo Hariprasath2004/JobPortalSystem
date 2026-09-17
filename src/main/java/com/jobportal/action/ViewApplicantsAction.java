@@ -13,125 +13,94 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class ViewApplicantsAction extends ActionSupport {
 
-    private int jobId;
+	private int jobId;
 
-    private List<Applicant> applicants;
+	private List<Applicant> applicants;
 
+	@Override
+	public String execute() {
 
-    @Override
-    public String execute() {
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpSession session = request.getSession(false);
 
-        HttpSession session =
-                request.getSession(false);
+		// Check login
+		if (session == null) {
+			return "login";
+		}
 
+		// Get logged-in recruiter
+		Integer recruiterId = (Integer) session.getAttribute("userId");
 
-        // Check login
-        if (session == null) {
-            return "login";
-        }
+		if (recruiterId == null) {
+			return "login";
+		}
 
+		// Only recruiters can view applicants
+		String role = (String) session.getAttribute("role");
 
-        // Get logged-in recruiter
-        Integer recruiterId =
-                (Integer) session.getAttribute("userId");
+		if (!"EMPLOYER".equalsIgnoreCase(role) && !"RECRUITER".equalsIgnoreCase(role)) {
 
-        if (recruiterId == null) {
-            return "login";
-        }
+			addActionError("Only recruiters can view applicants.");
 
+			return ERROR;
+		}
 
-        // Only recruiters can view applicants
-        String role =
-                (String) session.getAttribute("role");
+		// Validate job ID
+		if (jobId <= 0) {
 
-        if (!"EMPLOYER".equalsIgnoreCase(role)
-                && !"RECRUITER".equalsIgnoreCase(role)) {
+			addActionError("Invalid job selected.");
 
-            addActionError(
-                "Only recruiters can view applicants."
-            );
+			return ERROR;
+		}
 
-            return ERROR;
-        }
+		/*
+		 * Make sure this job belongs to the logged-in recruiter.
+		 */
+		com.jobportal.dao.JobDAO jobDAO = new com.jobportal.dao.JobDAO();
 
+		List<com.jobportal.model.Job> recruiterJobs = jobDAO.getJobsByRecruiterId(recruiterId);
 
-        // Validate job ID
-        if (jobId <= 0) {
+		boolean ownsJob = false;
 
-            addActionError(
-                "Invalid job selected."
-            );
+		for (com.jobportal.model.Job job : recruiterJobs) {
 
-            return ERROR;
-        }
+			if (job.getJobId() == jobId) {
 
+				ownsJob = true;
+				break;
+			}
+		}
 
-        /*
-         * Make sure this job belongs
-         * to the logged-in recruiter.
-         */
-        com.jobportal.dao.JobDAO jobDAO =
-                new com.jobportal.dao.JobDAO();
+		if (!ownsJob) {
 
-        List<com.jobportal.model.Job> recruiterJobs =
-                jobDAO.getJobsByRecruiterId(recruiterId);
+			addActionError("You are not authorized to view applicants for this job.");
 
+			return ERROR;
+		}
 
-        boolean ownsJob = false;
+		// Get applicants
+		JobApplicationDAO dao = new JobApplicationDAO();
 
-        for (com.jobportal.model.Job job : recruiterJobs) {
+		applicants = dao.getApplicantsByJobId(jobId);
 
-            if (job.getJobId() == jobId) {
+		return SUCCESS;
+	}
 
-                ownsJob = true;
-                break;
-            }
-        }
+	public int getJobId() {
+		return jobId;
+	}
 
+	public void setJobId(int jobId) {
+		this.jobId = jobId;
+	}
 
-        if (!ownsJob) {
+	public List<Applicant> getApplicants() {
+		return applicants;
+	}
 
-            addActionError(
-                "You are not authorized to view applicants for this job."
-            );
+	public void setApplicants(List<Applicant> applicants) {
 
-            return ERROR;
-        }
-
-
-        // Get applicants
-        JobApplicationDAO dao =
-                new JobApplicationDAO();
-
-        applicants =
-                dao.getApplicantsByJobId(jobId);
-
-
-        return SUCCESS;
-    }
-
-
-    public int getJobId() {
-        return jobId;
-    }
-
-
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
-
-
-    public List<Applicant> getApplicants() {
-        return applicants;
-    }
-
-
-    public void setApplicants(
-            List<Applicant> applicants) {
-
-        this.applicants = applicants;
-    }
+		this.applicants = applicants;
+	}
 }

@@ -9,18 +9,17 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class LogoutAction extends ActionSupport {
 
-    @Override
-    public String execute() {
+	@Override
+	public String execute() {
 
-        HttpServletRequest request =
-                ServletActionContext.getRequest();
+		HttpServletRequest request = ServletActionContext.getRequest();
 
-        HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(false);
 
-        if (session != null) {
-            session.invalidate();
-        }
+		if (session != null) {
+			session.invalidate();
+		}
 
-        return SUCCESS;
-    }
+		return SUCCESS;
+	}
 }
