@@ -10,12 +10,7 @@ public class EducationDAO {
 
 	public boolean saveEducation(Education education) {
 
-		String sql = """
-				INSERT INTO education
-				(user_id, degree, institution, specialization,
-				 start_year, end_year, grade)
-				VALUES (?, ?, ?, ?, ?, ?, ?)
-				""";
+		String sql = "INSERT INTO education (user_id, degree, institution, specialization, start_year, end_year, grade) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 

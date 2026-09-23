@@ -21,28 +21,38 @@
 
 		</action>
 		<action name="register"
-			class="com.jobportal.action.RegisterAction">
+			class="com.jobportal.controller.RegisterController" method="register">
 
 			<result name="success">/registrationSuccess.jsp</result>
 			<result name="error">/register.jsp</result>
 
 		</action>
-		<action name="login" class="com.jobportal.action.LoginAction">
 
-			<result name="seeker" type="redirectAction">
-				seekerDashboard
+		<action name="login"
+			class="com.jobportal.controller.AuthenticateController"
+			method="login">
+
+			<result name="seeker">
+				/seekerDashboard.jsp
 			</result>
 
-			<result name="recruiter" type="redirectAction">
-				recruiterDashboard
+			<result name="recruiter">
+				/recruiterDashboard.jsp
 			</result>
 
-			<result name="error">/login.jsp</result>
+			<result name="error">
+				/login.jsp
+			</result>
 
 		</action>
-		<action name="logout" class="com.jobportal.action.LogoutAction">
 
-			<result name="success">/login.jsp</result>
+		<action name="logout"
+			class="com.jobportal.controller.AuthenticateController"
+			method="logout">
+
+			<result name="success">
+				/index.jsp
+			</result>
 
 		</action>
 		<action name="seekerDashboard"

@@ -11,21 +11,7 @@ public class CompanyProfileDAO {
 
 	public CompanyProfile getByRecruiterId(int recruiterId) {
 
-		String sql = """
-				SELECT
-				    company_id,
-				    recruiter_id,
-				    company_name,
-				    company_description,
-				    website,
-				    industry,
-				    company_size,
-				    location,
-				    created_at,
-				    updated_at
-				FROM company_profiles
-				WHERE recruiter_id = ?
-				""";
+		String sql = "SELECT company_id, recruiter_id, company_name, company_description, website, industry, company_size, location, created_at, updated_at FROM company_profiles WHERE recruiter_id = ?";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -69,19 +55,7 @@ public class CompanyProfileDAO {
 
 	public boolean saveProfile(CompanyProfile profile) {
 
-		String sql = """
-				INSERT INTO company_profiles
-				(
-				    recruiter_id,
-				    company_name,
-				    company_description,
-				    website,
-				    industry,
-				    company_size,
-				    location
-				)
-				VALUES (?, ?, ?, ?, ?, ?, ?)
-				""";
+		String sql = "INSERT INTO company_profiles (recruiter_id, company_name, company_description, website, industry, company_size, location) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -109,18 +83,7 @@ public class CompanyProfileDAO {
 
 	public boolean updateProfile(CompanyProfile profile) {
 
-		String sql = """
-				UPDATE company_profiles
-				SET
-				    company_name = ?,
-				    company_description = ?,
-				    website = ?,
-				    industry = ?,
-				    company_size = ?,
-				    location = ?,
-				    updated_at = CURRENT_TIMESTAMP
-				WHERE recruiter_id = ?
-				""";
+		String sql = "UPDATE company_profiles SET company_name = ?, company_description = ?, website = ?, industry = ?, company_size = ?, location = ?, updated_at = CURRENT_TIMESTAMP WHERE recruiter_id = ?";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 

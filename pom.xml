@@ -46,6 +46,16 @@
 			<version>42.7.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.mindrot</groupId>
+			<artifactId>jbcrypt</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>7.2.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

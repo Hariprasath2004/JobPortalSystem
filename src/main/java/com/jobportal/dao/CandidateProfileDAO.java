@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Date;
+
 import com.jobportal.model.CandidateProfile;
 import com.jobportal.util.DBConnection;
 
@@ -11,20 +12,7 @@ public class CandidateProfileDAO {
 
 	public CandidateProfile getProfileByUserId(int userId) {
 
-		String sql = """
-				SELECT profile_id,
-				       user_id,
-				       phone,
-				       date_of_birth,
-				       gender,
-				       location,
-				       headline,
-				       summary,
-				       resume_path,
-				       profile_completion
-				FROM candidate_profiles
-				WHERE user_id = ?
-				""";
+		String sql = "SELECT profile_id, user_id, phone, date_of_birth, gender, location, headline, summary, resume_path, profile_completion FROM candidate_profiles WHERE user_id = ?";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -69,22 +57,7 @@ public class CandidateProfileDAO {
 
 	public boolean saveProfile(CandidateProfile profile) {
 
-		String sql = """
-				INSERT INTO candidate_profiles
-				(user_id, phone, date_of_birth, gender, location,
-				 headline, summary, resume_path, profile_completion)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-				ON CONFLICT (user_id)
-				DO UPDATE SET
-				    phone = EXCLUDED.phone,
-				    date_of_birth = EXCLUDED.date_of_birth,
-				    gender = EXCLUDED.gender,
-				    location = EXCLUDED.location,
-				    headline = EXCLUDED.headline,
-				    summary = EXCLUDED.summary,
-				    resume_path = EXCLUDED.resume_path,
-				    profile_completion = EXCLUDED.profile_completion
-				""";
+		String sql = "INSERT INTO candidate_profiles (user_id, phone, date_of_birth, gender, location, headline, summary, resume_path, profile_completion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (user_id) DO UPDATE SET phone = EXCLUDED.phone, date_of_birth = EXCLUDED.date_of_birth, gender = EXCLUDED.gender, location = EXCLUDED.location, headline = EXCLUDED.headline, summary = EXCLUDED.summary, resume_path = EXCLUDED.resume_path, profile_completion = EXCLUDED.profile_completion";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 

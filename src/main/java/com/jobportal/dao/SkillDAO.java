@@ -13,24 +13,11 @@ public class SkillDAO {
 
 	public boolean saveSkill(Skill skill) {
 
-		String checkSql = """
-				SELECT skill_id
-				FROM skills
-				WHERE user_id = ?
-				  AND LOWER(skill_name) = LOWER(?)
-				""";
+		String checkSql = "SELECT skill_id FROM skills WHERE user_id = ? AND LOWER(skill_name) = LOWER(?)";
 
-		String updateSql = """
-				UPDATE skills
-				SET skill_level = ?
-				WHERE skill_id = ?
-				""";
+		String updateSql = "UPDATE skills SET skill_level = ? WHERE skill_id = ?";
 
-		String insertSql = """
-				INSERT INTO skills
-				(user_id, skill_name, skill_level)
-				VALUES (?, ?, ?)
-				""";
+		String insertSql = "INSERT INTO skills (user_id, skill_name, skill_level) VALUES (?, ?, ?)";
 
 		try (Connection con = DBConnection.getConnection()) {
 
@@ -79,16 +66,7 @@ public class SkillDAO {
 
 		List<Skill> skills = new ArrayList<>();
 
-		String sql = """
-				SELECT
-				    skill_id,
-				    user_id,
-				    skill_name,
-				    skill_level
-				FROM skills
-				WHERE user_id = ?
-				ORDER BY skill_id
-				""";
+		String sql = "SELECT skill_id, user_id, skill_name, skill_level FROM skills WHERE user_id = ? ORDER BY skill_id";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 

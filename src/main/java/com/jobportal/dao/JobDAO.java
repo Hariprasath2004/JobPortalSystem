@@ -13,22 +13,7 @@ public class JobDAO {
 
 	public boolean saveJob(Job job) {
 
-		String sql = """
-				INSERT INTO jobs
-				(
-				    recruiter_id,
-				    job_title,
-				    company_name,
-				    job_description,
-				    required_skills,
-				    location,
-				    job_type,
-				    experience_required,
-				    salary_min,
-				    salary_max
-				)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-				""";
+		String sql = "INSERT INTO jobs (recruiter_id, job_title, company_name, job_description, required_skills, location, job_type, experience_required, salary_min, salary_max) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -55,24 +40,7 @@ public class JobDAO {
 
 		List<Job> jobs = new ArrayList<>();
 
-		String sql = """
-				SELECT
-				    job_id,
-				    recruiter_id,
-				    job_title,
-				    company_name,
-				    job_description,
-				    required_skills,
-				    location,
-				    job_type,
-				    experience_required,
-				    salary_min,
-				    salary_max,
-				    created_at
-				FROM jobs
-				WHERE recruiter_id = ?
-				ORDER BY created_at DESC
-				""";
+		String sql = "SELECT job_id, recruiter_id, job_title, company_name, job_description, required_skills, location, job_type, experience_required, salary_min, salary_max, created_at FROM jobs WHERE recruiter_id = ? ORDER BY created_at DESC";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -109,11 +77,7 @@ public class JobDAO {
 
 	public boolean deleteJob(int jobId, int recruiterId) {
 
-		String sql = """
-				DELETE FROM jobs
-				WHERE job_id = ?
-				AND recruiter_id = ?
-				""";
+		String sql = "DELETE FROM jobs WHERE job_id = ? AND recruiter_id = ?";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -132,23 +96,7 @@ public class JobDAO {
 
 		List<Job> jobs = new ArrayList<>();
 
-		String sql = """
-				SELECT
-				    job_id,
-				    recruiter_id,
-				    job_title,
-				    company_name,
-				    job_description,
-				    required_skills,
-				    location,
-				    job_type,
-				    experience_required,
-				    salary_min,
-				    salary_max,
-				    created_at
-				FROM jobs
-				ORDER BY created_at DESC
-				""";
+		String sql = "SELECT job_id, recruiter_id, job_title, company_name, job_description, required_skills, location, job_type, experience_required, salary_min, salary_max, created_at FROM jobs ORDER BY created_at DESC";
 
 		try (Connection con = DBConnection.getConnection();
 				PreparedStatement ps = con.prepareStatement(sql);

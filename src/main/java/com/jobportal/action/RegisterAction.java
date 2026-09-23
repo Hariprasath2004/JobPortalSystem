@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import com.opensymphony.xwork2.ActionSupport;
-
+import org.mindrot.jbcrypt.BCrypt;
 public class RegisterAction extends ActionSupport {
 
 	private String fullName;
@@ -17,33 +17,35 @@ public class RegisterAction extends ActionSupport {
 	@Override
 	public String execute() {
 
-		String sql = """
-				INSERT INTO users
-				(full_name, email, password, role)
-				VALUES (?, ?, ?, ?)
-				""";
+	    String sql = """
+	            INSERT INTO users
+	            (full_name, email, password, role)
+	            VALUES (?, ?, ?, ?)
+	            """;
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+	    try (Connection con = DBConnection.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
 
-			ps.setString(1, fullName);
-			ps.setString(2, email);
-			ps.setString(3, password);
-			ps.setString(4, role);
+	        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-			ps.executeUpdate();
+	        ps.setString(1, fullName);
+	        ps.setString(2, email);
+	        ps.setString(3, hashedPassword);
+	        ps.setString(4, role);
 
-			return SUCCESS;
+	        ps.executeUpdate();
 
-		} catch (Exception e) {
+	        return SUCCESS;
 
-			e.printStackTrace();
+	    } catch (Exception e) {
 
-			addActionError("Registration failed: " + e.getMessage());
+	        e.printStackTrace();
 
-			return ERROR;
-		}
+	        addActionError("Registration failed: " + e.getMessage());
+
+	        return ERROR;
+	    }
 	}
-
 	public String getFullName() {
 		return fullName;
 	}

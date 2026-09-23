@@ -13,12 +13,7 @@ public class ExperienceDAO {
 
 	public boolean saveExperience(Experience experience) {
 
-		String sql = """
-				INSERT INTO experience
-				(user_id, job_title, company_name, location,
-				 start_date, end_date, currently_working, description)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-				""";
+		String sql = "INSERT INTO experience (user_id, job_title, company_name, location, start_date, end_date, currently_working, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -62,20 +57,7 @@ public class ExperienceDAO {
 
 		List<Experience> experiences = new ArrayList<>();
 
-		String sql = """
-				SELECT experience_id,
-				       user_id,
-				       job_title,
-				       company_name,
-				       location,
-				       start_date,
-				       end_date,
-				       currently_working,
-				       description
-				FROM experience
-				WHERE user_id = ?
-				ORDER BY start_date DESC
-				""";
+		String sql = "SELECT experience_id, user_id, job_title, company_name, location, start_date, end_date, currently_working, description FROM experience WHERE user_id = ? ORDER BY start_date DESC";
 
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
