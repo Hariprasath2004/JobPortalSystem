@@ -13,17 +13,24 @@ public class RecruiterCandidateProfileAction extends ActionSupport {
 	@Override
 	public String execute() {
 
+		// Check whether candidate ID is valid
 		if (userId <= 0) {
+
 			addActionError("Invalid candidate.");
+
 			return ERROR;
 		}
 
 		CandidateProfileDAO dao = new CandidateProfileDAO();
 
+		// Get candidate profile using candidate user ID
 		profile = dao.getProfileByUserId(userId);
 
+		// Candidate profile does not exist
 		if (profile == null) {
+
 			addActionError("Candidate profile not found.");
+
 			return ERROR;
 		}
 

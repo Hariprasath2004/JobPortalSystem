@@ -1,8 +1,8 @@
 package com.jobportal.controller;
 
-import java.util.Map;
+import javax.servlet.http.HttpSession;
 
-import org.apache.struts2.interceptor.SessionAware;
+import org.apache.struts2.ServletActionContext;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.jobportal.dao.UserDAO;
@@ -11,12 +11,10 @@ import com.jobportal.util.RedisConnection;
 
 import redis.clients.jedis.Jedis;
 
-public class AuthenticateController implements SessionAware {
+public class AuthenticateController {
 
 	private String email;
 	private String password;
-
-	private Map<String, Object> session;
 
 	private UserDAO userDAO = new UserDAO();
 
@@ -32,11 +30,7 @@ public class AuthenticateController implements SessionAware {
 
 		User user = getUserFromRedis();
 
-		// -------------------------------------------------
-		// If user is not available in Redis,
-		// get user from PostgreSQL
-		// -------------------------------------------------
-
+		// User not found in Redis
 		if (user == null) {
 
 			System.out.println("User not found in Redis");
@@ -50,14 +44,14 @@ public class AuthenticateController implements SessionAware {
 				return "error";
 			}
 
-			// Store user details in Redis
 			saveUserToRedis(user);
+
+		} else {
+
+			System.out.println("User loaded from Redis");
 		}
 
-		// -------------------------------------------------
 		// Verify password
-		// -------------------------------------------------
-
 		boolean passwordMatched = BCrypt.checkpw(password, user.getPassword());
 
 		if (!passwordMatched) {
@@ -67,19 +61,19 @@ public class AuthenticateController implements SessionAware {
 			return "error";
 		}
 
-		// -------------------------------------------------
-		// Store logged-in user in HTTP session
-		// -------------------------------------------------
+		// Get HTTP session
+		HttpSession session = ServletActionContext.getRequest().getSession();
 
-		session.put("loggedIn", true);
+		// Store logged-in user in session
+		session.setAttribute("loggedIn", true);
 
-		session.put("userId", user.getUserId());
+		session.setAttribute("userId", user.getUserId());
 
-		session.put("fullName", user.getFullName());
+		session.setAttribute("fullName", user.getFullName());
 
-		session.put("email", user.getEmail());
+		session.setAttribute("email", user.getEmail());
 
-		session.put("role", user.getRole());
+		session.setAttribute("role", user.getRole());
 
 		System.out.println("Login successful");
 
@@ -87,10 +81,7 @@ public class AuthenticateController implements SessionAware {
 
 		System.out.println("Role: " + user.getRole());
 
-		// -------------------------------------------------
 		// Redirect based on role
-		// -------------------------------------------------
-
 		if ("JOB_SEEKER".equals(user.getRole())) {
 
 			return "seeker";
@@ -121,8 +112,6 @@ public class AuthenticateController implements SessionAware {
 				return null;
 			}
 
-			System.out.println("User found in Redis");
-
 			User user = new User();
 
 			user.setUserId(Integer.parseInt(jedis.hget(redisKey, "userId")));
@@ -133,12 +122,7 @@ public class AuthenticateController implements SessionAware {
 
 			user.setRole(jedis.hget(redisKey, "role"));
 
-			/*
-			 * Password is intentionally NOT stored in Redis.
-			 *
-			 * Password verification is always performed using the password hash stored in
-			 * PostgreSQL.
-			 */
+			user.setPassword(jedis.hget(redisKey, "password"));
 
 			return user;
 
@@ -168,6 +152,8 @@ public class AuthenticateController implements SessionAware {
 
 			jedis.hset(redisKey, "role", user.getRole());
 
+			jedis.hset(redisKey, "password", user.getPassword());
+
 			// Cache expires after 30 minutes
 			jedis.expire(redisKey, 1800);
 
@@ -187,26 +173,20 @@ public class AuthenticateController implements SessionAware {
 
 		System.out.println("========== LOGOUT ==========");
 
-		// Clear current HTTP session
-		session.clear();
+		HttpSession session = ServletActionContext.getRequest().getSession(false);
 
-		System.out.println("Session cleared");
+		if (session != null) {
+
+			session.invalidate();
+		}
+
+		System.out.println("Logout successful");
 
 		return "success";
 	}
 
 	// =====================================================
-	// STRUTS SESSION
-	// =====================================================
-
-	@Override
-	public void setSession(Map<String, Object> session) {
-
-		this.session = session;
-	}
-
-	// =====================================================
-	// INPUT SETTERS
+	// SETTERS
 	// =====================================================
 
 	public void setEmail(String email) {

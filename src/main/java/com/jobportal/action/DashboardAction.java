@@ -15,34 +15,33 @@ public class DashboardAction extends ActionSupport {
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
-		// No login session
+		// User must be logged in
 		if (session == null) {
 			return LOGIN;
 		}
 
 		String role = (String) session.getAttribute("role");
 
-		// No role stored in session
+		// Role must be available in the session
 		if (role == null) {
 			return LOGIN;
 		}
 
-		// Job Seeker dashboard
-		if (dashboardType.equals("seeker") && role.equals("JOB_SEEKER")) {
+		// Allow job seekers to access the seeker dashboard
+		if ("seeker".equalsIgnoreCase(dashboardType) && "JOB_SEEKER".equalsIgnoreCase(role)) {
 
 			return SUCCESS;
 		}
 
-		// Recruiter dashboard
-		if (dashboardType.equals("recruiter") && role.equals("EMPLOYER")) {
+		// Allow recruiters to access the recruiter dashboard
+		if ("recruiter".equalsIgnoreCase(dashboardType) && "EMPLOYER".equalsIgnoreCase(role)) {
 
 			return SUCCESS;
 		}
 
-		// Wrong dashboard for the logged-in role
+		// Prevent access to an unauthorized dashboard
 		return LOGIN;
 	}
 

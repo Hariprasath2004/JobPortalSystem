@@ -15,69 +15,50 @@ import com.opensymphony.xwork2.ActionSupport;
 public class JobSearchAction extends ActionSupport {
 
 	private List<Job> jobs;
-
 	private List<Integer> appliedJobIds;
 
 	@Override
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
-		// Check login
 		if (session == null) {
-			return "login";
+			return LOGIN;
 		}
 
 		Integer userId = (Integer) session.getAttribute("userId");
 
 		if (userId == null) {
-			return "login";
+			return LOGIN;
 		}
 
-		// Check role
 		String role = (String) session.getAttribute("role");
 
 		if (!"JOB_SEEKER".equalsIgnoreCase(role) && !"USER".equalsIgnoreCase(role)
 				&& !"SEEKER".equalsIgnoreCase(role)) {
 
 			addActionError("Only job seekers can search jobs.");
-
 			return ERROR;
 		}
 
-		// Load all jobs
 		JobDAO jobDAO = new JobDAO();
-
 		jobs = jobDAO.getAllJobs();
 
-		// Load jobs already applied by this seeker
 		JobApplicationDAO applicationDAO = new JobApplicationDAO();
-
 		appliedJobIds = applicationDAO.getAppliedJobIds(userId);
 
-		/*
-		 * Read success message from session
-		 */
 		String successMessage = (String) session.getAttribute("applicationSuccess");
 
 		if (successMessage != null) {
-
 			addActionMessage(successMessage);
-
 			session.removeAttribute("applicationSuccess");
 		}
 
-		/*
-		 * Read error message from session
-		 */
 		String errorMessage = (String) session.getAttribute("applicationError");
 
 		if (errorMessage != null) {
-
 			addActionError(errorMessage);
-
 			session.removeAttribute("applicationError");
 		}
 
@@ -97,7 +78,6 @@ public class JobSearchAction extends ActionSupport {
 	}
 
 	public void setAppliedJobIds(List<Integer> appliedJobIds) {
-
 		this.appliedJobIds = appliedJobIds;
 	}
 }

@@ -14,65 +14,43 @@ import com.opensymphony.xwork2.ActionSupport;
 public class ExperienceAction extends ActionSupport {
 
 	private Experience experience;
-
 	private List<Experience> experiences;
 
 	@Override
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
-		// Check whether user is logged in
 		if (session == null) {
-			return "login";
+			return LOGIN;
 		}
 
 		Integer userId = (Integer) session.getAttribute("userId");
 
 		if (userId == null) {
-			return "login";
+			return LOGIN;
 		}
 
-		/*
-		 * POST request means user submitted the experience form.
-		 */
+		ExperienceDAO dao = new ExperienceDAO();
+
+		// Save experience
 		if ("POST".equalsIgnoreCase(request.getMethod())) {
 
-			// Create object if it is null
 			if (experience == null) {
 				experience = new Experience();
 			}
 
-			// Set logged-in user's ID
 			experience.setUserId(userId);
 
-			ExperienceDAO dao = new ExperienceDAO();
-
-			boolean saved = dao.saveExperience(experience);
-
-			if (saved) {
-
-				// Reload all experiences after saving
+			if (!dao.saveExperience(experience)) {
+				addActionError("Unable to save experience.");
 				experiences = dao.getExperiencesByUserId(userId);
-
-				return SUCCESS;
+				return ERROR;
 			}
-
-			addActionError("Unable to save experience.");
-
-			// Load existing experiences
-			experiences = dao.getExperiencesByUserId(userId);
-
-			return ERROR;
 		}
 
-		/*
-		 * GET request means open the experience page.
-		 */
-		ExperienceDAO dao = new ExperienceDAO();
-
+		// Load user's experiences
 		experiences = dao.getExperiencesByUserId(userId);
 
 		return SUCCESS;

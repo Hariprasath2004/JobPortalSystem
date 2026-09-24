@@ -12,26 +12,33 @@ public class DeleteJobAction extends ActionSupport {
 
 	private int jobId;
 
+	@Override
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
+		// User must be logged in
 		if (session == null) {
-			return "login";
+			return LOGIN;
 		}
 
 		Integer userId = (Integer) session.getAttribute("userId");
-
 		String role = (String) session.getAttribute("role");
 
 		if (userId == null) {
-			return "login";
+			return LOGIN;
 		}
 
+		// Only recruiters can delete jobs
 		if (!"EMPLOYER".equalsIgnoreCase(role)) {
-			return "login";
+			return LOGIN;
+		}
+
+		// Validate the selected job
+		if (jobId <= 0) {
+			addActionError("Invalid job selected.");
+			return ERROR;
 		}
 
 		JobDAO dao = new JobDAO();

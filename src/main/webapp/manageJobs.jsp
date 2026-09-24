@@ -26,7 +26,7 @@
 			<a href="recruiterDashboard"> Dashboard </a> <a href="companyProfile">
 				Company Profile </a> <a href="postJob"> Post Job </a> <a
 				href="manageJobs"> Manage Jobs </a> <a href="viewApplicants">
-				Applicants </a> <a href="Logout"> Logout </a>
+				Applicants </a> <a href="logout">Logout</a>
 
 		</div>
 

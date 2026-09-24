@@ -15,31 +15,32 @@ public class ManageJobsAction extends ActionSupport {
 
 	private List<Job> jobs;
 
+	@Override
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
+		// Check whether the user is logged in
 		if (session == null) {
-			return "login";
+			return LOGIN;
 		}
 
 		Integer userId = (Integer) session.getAttribute("userId");
-
 		String role = (String) session.getAttribute("role");
 
 		if (userId == null) {
-			return "login";
+			return LOGIN;
 		}
 
+		// Only recruiters can manage jobs
 		if (!"EMPLOYER".equalsIgnoreCase(role)) {
-			return "login";
+			return LOGIN;
 		}
 
-		JobDAO dao = new JobDAO();
-
-		jobs = dao.getJobsByRecruiterId(userId);
+		// Load jobs posted by the logged-in recruiter
+		JobDAO jobDAO = new JobDAO();
+		jobs = jobDAO.getJobsByRecruiterId(userId);
 
 		return SUCCESS;
 	}

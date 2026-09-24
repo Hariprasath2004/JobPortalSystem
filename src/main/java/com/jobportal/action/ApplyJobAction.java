@@ -10,69 +10,69 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class ApplyJobAction extends ActionSupport {
 
+	private static final String LOGIN = "login";
+	private static final String SEARCH = "search";
+
 	private int jobId;
 
 	@Override
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
-		// Check login
+		// User must be logged in
 		if (session == null) {
-			return "login";
+			return LOGIN;
 		}
 
-		// Get logged-in seeker
-		Integer seekerId = (Integer) session.getAttribute("userId");
+		Integer userId = (Integer) session.getAttribute("userId");
 
-		if (seekerId == null) {
-			return "login";
+		if (userId == null) {
+			return LOGIN;
 		}
 
-		// Check role
+		// Only job seekers can apply
 		String role = (String) session.getAttribute("role");
 
-		if (!"JOB_SEEKER".equalsIgnoreCase(role) && !"USER".equalsIgnoreCase(role)
-				&& !"SEEKER".equalsIgnoreCase(role)) {
-
+		if (!isJobSeeker(role)) {
 			session.setAttribute("applicationError", "Only job seekers can apply for jobs.");
-
-			return "search";
+			return SEARCH;
 		}
 
 		// Validate job ID
 		if (jobId <= 0) {
-
 			session.setAttribute("applicationError", "Invalid job selected.");
-
-			return "search";
+			return SEARCH;
 		}
 
 		JobApplicationDAO dao = new JobApplicationDAO();
 
-		// Check already applied
-		if (dao.hasApplied(jobId, seekerId)) {
-
+		// Prevent duplicate applications
+		if (dao.hasApplied(jobId, userId)) {
 			session.setAttribute("applicationError", "You have already applied for this job.");
-
-			return "search";
+			return SEARCH;
 		}
 
-		// Apply
-		boolean applied = dao.applyForJob(jobId, seekerId);
+		// Submit application
+		boolean applied = dao.applyForJob(jobId, userId);
 
 		if (applied) {
-
 			session.setAttribute("applicationSuccess", "Application submitted successfully.");
-
 		} else {
-
 			session.setAttribute("applicationError", "Failed to apply for the job.");
 		}
 
-		return "search";
+		return SEARCH;
+	}
+
+	/**
+	 * Checks whether the logged-in user has a job seeker role.
+	 */
+	private boolean isJobSeeker(String role) {
+
+		return role != null && ("JOB_SEEKER".equalsIgnoreCase(role) || "USER".equalsIgnoreCase(role)
+				|| "SEEKER".equalsIgnoreCase(role));
 	}
 
 	public int getJobId() {

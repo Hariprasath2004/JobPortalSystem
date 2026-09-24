@@ -19,22 +19,21 @@ public class MyApplicationsAction extends ActionSupport {
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
-		// Check login
+		// Check whether the user is logged in
 		if (session == null) {
-			return "login";
+			return LOGIN;
 		}
 
-		// Get logged-in user
-		Integer seekerId = (Integer) session.getAttribute("userId");
+		// Get the logged-in user's ID
+		Integer userId = (Integer) session.getAttribute("userId");
 
-		if (seekerId == null) {
-			return "login";
+		if (userId == null) {
+			return LOGIN;
 		}
 
-		// Only job seekers can view applications
+		// Only job seekers can view their applications
 		String role = (String) session.getAttribute("role");
 
 		if (!"USER".equalsIgnoreCase(role) && !"SEEKER".equalsIgnoreCase(role)
@@ -45,10 +44,10 @@ public class MyApplicationsAction extends ActionSupport {
 			return ERROR;
 		}
 
-		// Get applications
-		JobApplicationDAO dao = new JobApplicationDAO();
+		// Load applications submitted by the logged-in seeker
+		JobApplicationDAO jobApplicationDAO = new JobApplicationDAO();
 
-		applications = dao.getApplicationsBySeekerId(seekerId);
+		applications = jobApplicationDAO.getApplicationsBySeekerId(userId);
 
 		return SUCCESS;
 	}
@@ -58,7 +57,6 @@ public class MyApplicationsAction extends ActionSupport {
 	}
 
 	public void setApplications(List<MyApplication> applications) {
-
 		this.applications = applications;
 	}
 }

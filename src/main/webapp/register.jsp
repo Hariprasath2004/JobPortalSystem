@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
@@ -9,170 +9,131 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <title>Job Portal - Register</title>
+<title>Job Portal - Register</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+	<!-- ================= NAVBAR ================= -->
 
-    <nav class="navbar">
+	<nav class="navbar">
 
-        <div class="logo">
-            JobPortal
-        </div>
+		<div class="logo">JobPortal</div>
 
-        <div>
-            <a href="index.jsp">Home</a>
-            <a href="login.jsp">Login</a>
-        </div>
+		<div>
+			<a href="index.jsp">Home</a> <a href="login.jsp">Login</a>
+		</div>
 
-    </nav>
+	</nav>
 
 
-    <!-- ================= PAGE ================= -->
+	<!-- ================= PAGE ================= -->
 
-    <div class="page-container">
+	<div class="page-container">
 
-        <div class="page-header">
+		<div class="page-header">
 
-            <h1>Create Account</h1>
+			<h1>Create Account</h1>
 
-            <p>
-                Create your JobPortal account and start your journey.
-            </p>
+			<p>Create your JobPortal account and start your journey.</p>
 
-        </div>
+		</div>
 
 
-        <!-- ================= REGISTER FORM ================= -->
+		<!-- ================= REGISTER FORM ================= -->
 
-        <div class="form-card">
+		<div class="form-card">
 
-            <h2>Create your account</h2>
+			<h2>Create your account</h2>
 
 
-            <!-- Struts Errors -->
+			<!-- Struts Errors -->
 
-            <s:if test="hasActionErrors()">
+			<s:if test="hasActionErrors()">
 
-                <div class="alert alert-error">
+				<div class="alert alert-error">
 
-                    <s:actionerror />
+					<s:actionerror />
 
-                </div>
+				</div>
 
-            </s:if>
+			</s:if>
 
 
-            <!-- ================= FORM ================= -->
+			<!-- ================= FORM ================= -->
 
-            <form action="register" method="post">
+			<form action="register" method="post">
 
 
-                <!-- Full Name -->
+				<!-- Full Name -->
 
-                <div class="form-group">
+				<div class="form-group">
 
-                    <label>Full Name</label>
+					<label>Full Name</label> <input type="text" name="user.fullName"
+						class="form-control" placeholder="Enter your full name" required>
 
-                    <input
-                        type="text"
-                        name="user.fullName"
-                        class="form-control"
-                        placeholder="Enter your full name"
-                        required>
+				</div>
 
-                </div>
 
+				<!-- Email -->
 
-                <!-- Email -->
+				<div class="form-group">
 
-                <div class="form-group">
+					<label>Email</label> <input type="email" name="user.email"
+						class="form-control" placeholder="Enter your email" required>
 
-                    <label>Email</label>
+				</div>
 
-                    <input
-                        type="email"
-                        name="user.email"
-                        class="form-control"
-                        placeholder="Enter your email"
-                        required>
 
-                </div>
+				<!-- Password -->
 
+				<div class="form-group">
 
-                <!-- Password -->
+					<label>Password</label> <input type="password" name="user.password"
+						class="form-control" placeholder="Create a password" required>
 
-                <div class="form-group">
+				</div>
 
-                    <label>Password</label>
 
-                    <input
-                        type="password"
-                        name="user.password"
-                        class="form-control"
-                        placeholder="Create a password"
-                        required>
+				<!-- Role -->
 
-                </div>
+				<div class="form-group">
 
+					<label>Account Type</label> <select name="user.role"
+						class="form-control">
 
-                <!-- Role -->
+						<option value="JOB_SEEKER">Job Seeker</option>
 
-                <div class="form-group">
+						<option value="EMPLOYER">Employer</option>
 
-                    <label>Account Type</label>
+					</select>
 
-                    <select
-                        name="user.role"
-                        class="form-control">
+				</div>
 
-                        <option value="JOB_SEEKER">
-                            Job Seeker
-                        </option>
 
-                        <option value="EMPLOYER">
-                            Employer
-                        </option>
+				<!-- Register -->
 
-                    </select>
+				<button type="submit" class="btn btn-primary">Create
+					Account</button>
 
-                </div>
+			</form>
 
 
-                <!-- Register -->
+			<p>
 
-                <button
-                    type="submit"
-                    class="btn btn-primary">
+				Already have an account? <a href="login.jsp"> Login here </a>
 
-                    Create Account
+			</p>
 
-                </button>
 
-            </form>
+		</div>
 
-
-            <p>
-
-                Already have an account?
-
-                <a href="login.jsp">
-                    Login here
-                </a>
-
-            </p>
-
-
-        </div>
-
-    </div>
+	</div>
 
 </body>
 

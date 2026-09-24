@@ -2,7 +2,9 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
+
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -27,7 +29,10 @@
 			<a href="recruiterDashboard"> Dashboard </a> <a href="companyProfile">
 				Company Profile </a> <a href="postJob"> Post Job </a> <a
 				href="manageJobs"> Manage Jobs </a> <a href="viewApplicants">
-				Applicants </a> <a href="Logout"> Logout </a>
+				Applicants </a>
+
+			<!-- FIXED: logout must be lowercase -->
+			<a href="logout"> Logout </a>
 
 		</div>
 
@@ -47,7 +52,17 @@
 		</div>
 
 
-		<s:actionerror />
+		<!-- ================= ERRORS ================= -->
+
+		<s:if test="hasActionErrors()">
+
+			<div class="error-box">
+
+				<s:actionerror />
+
+			</div>
+
+		</s:if>
 
 
 		<!-- ================= APPLICANTS ================= -->
@@ -78,6 +93,8 @@
 
 								<th>Applied Date</th>
 
+								<th>Candidate Profile</th>
+
 								<th>Update Status</th>
 
 							</tr>
@@ -93,21 +110,43 @@
 
 									<td><s:property value="applicationId" /></td>
 
+
 									<td><s:property value="seekerId" /></td>
 
+
 									<td class="candidate-name"><s:property value="seekerName" />
+
 									</td>
+
 
 									<td><s:property value="seekerEmail" /></td>
 
+
 									<td><s:property value="jobTitle" /></td>
+
 
 									<td><span class="status-badge"> <s:property
 												value="applicationStatus" />
 
 									</span></td>
 
+
 									<td><s:property value="appliedAt" /></td>
+
+
+									<!-- ================= VIEW PROFILE ================= -->
+
+									<td><s:url action="recruiterCandidateProfile"
+											var="candidateProfileUrl">
+
+											<s:param name="userId" value="%{seekerId}" />
+
+										</s:url> <a href="${candidateProfileUrl}" class="btn btn-outline">
+
+											View Profile </a></td>
+
+
+									<!-- ================= UPDATE STATUS ================= -->
 
 									<td><s:form action="updateApplicationStatus" method="post"
 											cssClass="status-form">
@@ -116,14 +155,16 @@
 
 											<s:hidden name="jobId" value="%{jobId}" />
 
+
 											<s:select name="status"
 												list="#{
-                                                'SHORTLISTED':'SHORTLISTED',
-                                                'INTERVIEW':'INTERVIEW',
-                                                'SELECTED':'SELECTED',
-                                                'REJECTED':'REJECTED'
-                                            }"
+                                                    'SHORTLISTED':'SHORTLISTED',
+                                                    'INTERVIEW':'INTERVIEW',
+                                                    'SELECTED':'SELECTED',
+                                                    'REJECTED':'REJECTED'
+                                                }"
 												value="%{applicationStatus}" cssClass="status-select" />
+
 
 											<s:submit value="Update" cssClass="btn btn-primary" />
 
@@ -174,4 +215,5 @@
 	</div>
 
 </body>
+
 </html>

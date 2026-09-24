@@ -28,25 +28,20 @@
 	<form action="experience" method="post">
 
 		<label>Job Title:</label> <input type="text"
-			name="experience.jobTitle" required> <br>
-		<br> <label>Company Name:</label> <input type="text"
-			name="experience.companyName" required> <br>
-		<br> <label>Location:</label> <input type="text"
-			name="experience.location"> <br>
-		<br> <label>Start Date:</label> <input type="date"
-			name="experience.startDate"> <br>
+			name="experience.jobTitle" required> <br> <br> <label>Company
+			Name:</label> <input type="text" name="experience.companyName" required>
+		<br> <br> <label>Location:</label> <input type="text"
+			name="experience.location"> <br> <br> <label>Start
+			Date:</label> <input type="date" name="experience.startDate"> <br>
 		<br> <label>End Date:</label> <input type="date"
-			name="experience.endDate"> <br>
-		<br> <label> <input type="checkbox"
-			name="experience.currentlyWorking" value="true"> I currently
-			work here
-		</label> <br>
-		<br> <label>Description:</label> <br>
+			name="experience.endDate"> <br> <br> <label>
+			<input type="checkbox" name="experience.currentlyWorking"
+			value="true"> I currently work here
+		</label> <br> <br> <label>Description:</label> <br>
 
 		<textarea name="experience.description" rows="6" cols="60"></textarea>
 
-		<br>
-		<br>
+		<br> <br>
 
 
 		<button type="submit">Save Experience</button>

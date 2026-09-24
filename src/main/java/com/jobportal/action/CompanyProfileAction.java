@@ -13,34 +13,32 @@ public class CompanyProfileAction extends ActionSupport {
 
 	private CompanyProfile companyProfile;
 
-	private CompanyProfileDAO companyProfileDAO = new CompanyProfileDAO();
+	private final CompanyProfileDAO companyProfileDAO = new CompanyProfileDAO();
 
+	@Override
 	public String execute() {
 
 		HttpServletRequest request = ServletActionContext.getRequest();
-
 		HttpSession session = request.getSession(false);
 
-		// User session check
+		// Check whether the user is logged in
 		if (session == null) {
-			return "login";
+			return LOGIN;
 		}
 
 		Integer userId = (Integer) session.getAttribute("userId");
-
 		String role = (String) session.getAttribute("role");
 
-		// Login check
 		if (userId == null) {
-			return "login";
+			return LOGIN;
 		}
 
-		// Recruiter only
+		// Only recruiters can access the company profile
 		if (!"EMPLOYER".equalsIgnoreCase(role)) {
-			return "login";
+			return LOGIN;
 		}
 
-		// GET request
+		// Load the existing profile
 		if (!"POST".equalsIgnoreCase(request.getMethod())) {
 
 			companyProfile = companyProfileDAO.getByRecruiterId(userId);
@@ -48,12 +46,13 @@ public class CompanyProfileAction extends ActionSupport {
 			return SUCCESS;
 		}
 
-		// POST request
+		// Validate submitted profile
 		if (companyProfile == null) {
 			addActionError("Company profile details are required.");
 			return ERROR;
 		}
 
+		// Associate the profile with the logged-in recruiter
 		companyProfile.setRecruiterId(userId);
 
 		CompanyProfile existingProfile = companyProfileDAO.getByRecruiterId(userId);
@@ -62,16 +61,18 @@ public class CompanyProfileAction extends ActionSupport {
 
 		if (existingProfile == null) {
 
+			// Create a new company profile
 			saved = companyProfileDAO.saveProfile(companyProfile);
 
 		} else {
 
+			// Update the existing company profile
 			saved = companyProfileDAO.updateProfile(companyProfile);
 		}
 
 		if (saved) {
 
-			// Reload latest profile
+			// Reload the latest saved profile
 			companyProfile = companyProfileDAO.getByRecruiterId(userId);
 
 			return SUCCESS;

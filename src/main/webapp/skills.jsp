@@ -26,8 +26,8 @@
 	<form action="skill" method="post">
 
 		<label>Skill Name:</label> <input type="text" name="skill.skillName"
-			required> <br>
-		<br> <label>Proficiency:</label> <select name="skill.skillLevel">
+			required> <br> <br> <label>Proficiency:</label> <select
+			name="skill.skillLevel">
 
 			<option value="">Select Proficiency</option>
 
@@ -37,8 +37,7 @@
 
 			<option value="Advanced">Advanced</option>
 
-		</select> <br>
-		<br>
+		</select> <br> <br>
 
 		<button type="submit">Add Skill</button>
 
