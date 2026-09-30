@@ -12,53 +12,56 @@ public class CandidateProfileDAO {
 
 	public CandidateProfile getProfileByUserId(int userId) {
 
-		String sql = "SELECT profile_id, user_id, phone, date_of_birth, gender, location, headline, summary, resume_path, profile_completion FROM candidate_profiles WHERE user_id = ?";
+	    String sql = "SELECT profile_id, user_id, phone, date_of_birth, gender, "
+	            + "location, headline, summary, resume_path, profile_completion "
+	            + "FROM candidate_profiles WHERE user_id = " + userId;
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+	    try (Connection con = DBConnection.getConnection();
+	         java.sql.Statement st = con.createStatement()) {
 
-			ps.setInt(1, userId);
+	        ResultSet rs = st.executeQuery(sql);
 
-			ResultSet rs = ps.executeQuery();
+	        if (rs.next()) {
 
-			if (rs.next()) {
+	            CandidateProfile profile = new CandidateProfile();
 
-				CandidateProfile profile = new CandidateProfile();
+	            profile.setProfileId(rs.getInt("profile_id"));
+	            profile.setUserId(rs.getInt("user_id"));
+	            profile.setPhone(rs.getString("phone"));
+	            profile.setDateOfBirth(rs.getString("date_of_birth"));
+	            profile.setGender(rs.getString("gender"));
+	            profile.setLocation(rs.getString("location"));
+	            profile.setHeadline(rs.getString("headline"));
+	            profile.setSummary(rs.getString("summary"));
+	            profile.setResumePath(rs.getString("resume_path"));
+	            profile.setProfileCompletion(rs.getInt("profile_completion"));
 
-				profile.setProfileId(rs.getInt("profile_id"));
+	            return profile;
+	        }
 
-				profile.setUserId(rs.getInt("user_id"));
+	    } catch (Exception e) {
 
-				profile.setPhone(rs.getString("phone"));
+	        e.printStackTrace();
+	    }
 
-				profile.setDateOfBirth(rs.getString("date_of_birth"));
-
-				profile.setGender(rs.getString("gender"));
-
-				profile.setLocation(rs.getString("location"));
-
-				profile.setHeadline(rs.getString("headline"));
-
-				profile.setSummary(rs.getString("summary"));
-
-				profile.setResumePath(rs.getString("resume_path"));
-
-				profile.setProfileCompletion(rs.getInt("profile_completion"));
-
-				return profile;
-			}
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-
-		return null;
+	    return null;
 	}
 
 	public boolean saveProfile(CandidateProfile profile) {
 
-		String sql = "INSERT INTO candidate_profiles (user_id, phone, date_of_birth, gender, location, headline, summary, resume_path, profile_completion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (user_id) DO UPDATE SET phone = EXCLUDED.phone, date_of_birth = EXCLUDED.date_of_birth, gender = EXCLUDED.gender, location = EXCLUDED.location, headline = EXCLUDED.headline, summary = EXCLUDED.summary, resume_path = EXCLUDED.resume_path, profile_completion = EXCLUDED.profile_completion";
-
+		String sql = "INSERT INTO candidate_profiles "
+		        + "(user_id, phone, date_of_birth, gender, location, "
+		        + "headline, summary, resume_path, profile_completion) "
+		        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
+		        + "ON CONFLICT (user_id) DO UPDATE SET "
+		        + "phone = EXCLUDED.phone, "
+		        + "date_of_birth = EXCLUDED.date_of_birth, "
+		        + "gender = EXCLUDED.gender, "
+		        + "location = EXCLUDED.location, "
+		        + "headline = EXCLUDED.headline, "
+		        + "summary = EXCLUDED.summary, "
+		        + "resume_path = EXCLUDED.resume_path, "
+		        + "profile_completion = EXCLUDED.profile_completion";
 		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
 			ps.setInt(1, profile.getUserId());

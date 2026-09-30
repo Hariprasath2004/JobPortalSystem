@@ -1,7 +1,6 @@
 package com.jobportal.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +12,11 @@ public class ExperienceDAO {
 
 	public boolean saveExperience(Experience experience) {
 
-		String sql = "INSERT INTO experience (user_id, job_title, company_name, location, start_date, end_date, currently_working, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO experience "
+				+ "(user_id, job_title, company_name, location, start_date, end_date, currently_working, description) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		try (Connection con = DBConnection.getConnection(); java.sql.PreparedStatement ps = con.prepareStatement(sql)) {
 
 			ps.setInt(1, experience.getUserId());
 			ps.setString(2, experience.getJobTitle());
@@ -27,6 +28,7 @@ public class ExperienceDAO {
 				ps.setDate(5, java.sql.Date.valueOf(experience.getStartDate()));
 
 			} else {
+
 				ps.setNull(5, java.sql.Types.DATE);
 			}
 
@@ -35,6 +37,7 @@ public class ExperienceDAO {
 				ps.setDate(6, java.sql.Date.valueOf(experience.getEndDate()));
 
 			} else {
+
 				ps.setNull(6, java.sql.Types.DATE);
 			}
 
@@ -49,6 +52,7 @@ public class ExperienceDAO {
 		} catch (Exception e) {
 
 			e.printStackTrace();
+
 			return false;
 		}
 	}
@@ -57,13 +61,13 @@ public class ExperienceDAO {
 
 		List<Experience> experiences = new ArrayList<>();
 
-		String sql = "SELECT experience_id, user_id, job_title, company_name, location, start_date, end_date, currently_working, description FROM experience WHERE user_id = ? ORDER BY start_date DESC";
+		String sql = "SELECT experience_id, user_id, job_title, company_name, "
+				+ "location, start_date, end_date, currently_working, description " + "FROM experience WHERE user_id = "
+				+ userId + " ORDER BY start_date DESC";
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		try (Connection con = DBConnection.getConnection(); java.sql.Statement st = con.createStatement()) {
 
-			ps.setInt(1, userId);
-
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = st.executeQuery(sql);
 
 			while (rs.next()) {
 
@@ -80,10 +84,12 @@ public class ExperienceDAO {
 				experience.setLocation(rs.getString("location"));
 
 				if (rs.getDate("start_date") != null) {
+
 					experience.setStartDate(rs.getDate("start_date").toString());
 				}
 
 				if (rs.getDate("end_date") != null) {
+
 					experience.setEndDate(rs.getDate("end_date").toString());
 				}
 

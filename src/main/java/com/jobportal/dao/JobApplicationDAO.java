@@ -15,17 +15,12 @@ public class JobApplicationDAO {
 
 	public boolean hasApplied(int jobId, int userId) {
 
-		String sql = "SELECT application_id " + "FROM job_applications " + "WHERE job_id = ? AND seeker_id = ?";
+		String sql = "SELECT application_id " + "FROM job_applications " + "WHERE job_id = " + jobId
+				+ " AND seeker_id = " + userId;
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		try (Connection con = DBConnection.getConnection(); java.sql.Statement st = con.createStatement()) {
 
-			ps.setInt(1, jobId);
-			ps.setInt(2, userId);
-
-			System.out.println("Connecting to PostgreSQL...");
-			System.out.println("PostgreSQL connection successful.");
-
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = st.executeQuery(sql);
 
 			return rs.next();
 
@@ -75,15 +70,12 @@ public class JobApplicationDAO {
 
 	public JobApplication getApplication(int jobId, int userId) {
 
-		String sql = "SELECT application_id, " + "job_id, " + "seeker_id, " + "application_status, " + "applied_at "
-				+ "FROM job_applications " + "WHERE job_id = ? AND seeker_id = ?";
+		String sql = "SELECT application_id, job_id, seeker_id, " + "application_status, applied_at "
+				+ "FROM job_applications " + "WHERE job_id = " + jobId + " AND seeker_id = " + userId;
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		try (Connection con = DBConnection.getConnection(); java.sql.Statement st = con.createStatement()) {
 
-			ps.setInt(1, jobId);
-			ps.setInt(2, userId);
-
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = st.executeQuery(sql);
 
 			if (rs.next()) {
 
@@ -105,25 +97,21 @@ public class JobApplicationDAO {
 		} catch (Exception e) {
 
 			System.out.println("ERROR WHILE GETTING APPLICATION");
-
 			e.printStackTrace();
 		}
 
 		return null;
 	}
 
-
 	public List<Integer> getAppliedJobIds(int userId) {
 
 		List<Integer> appliedJobIds = new ArrayList<>();
 
-		String sql = "SELECT job_id " + "FROM job_applications " + "WHERE seeker_id = ?";
+		String sql = "SELECT job_id " + "FROM job_applications " + "WHERE seeker_id = " + userId;
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		try (Connection con = DBConnection.getConnection(); java.sql.Statement st = con.createStatement()) {
 
-			ps.setInt(1, userId);
-
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = st.executeQuery(sql);
 
 			while (rs.next()) {
 
@@ -133,7 +121,6 @@ public class JobApplicationDAO {
 		} catch (Exception e) {
 
 			System.out.println("ERROR WHILE GETTING APPLIED JOB IDS");
-
 			e.printStackTrace();
 		}
 
@@ -188,21 +175,18 @@ public class JobApplicationDAO {
 		return applications;
 	}
 
-
 	public List<Applicant> getApplicantsByJobId(int jobId) {
 
 		List<Applicant> applicants = new ArrayList<>();
 
-		String sql = "SELECT " + "a.application_id, " + "a.job_id, " + "a.seeker_id, " + "u.full_name, " + "u.email, "
-				+ "j.job_title, " + "a.application_status, " + "a.applied_at " + "FROM job_applications a "
-				+ "INNER JOIN users u " + "ON a.seeker_id = u.user_id " + "INNER JOIN jobs j "
-				+ "ON a.job_id = j.job_id " + "WHERE a.job_id = ? " + "ORDER BY a.applied_at DESC";
+		String sql = "SELECT a.application_id, a.job_id, a.seeker_id, " + "u.full_name, u.email, j.job_title, "
+				+ "a.application_status, a.applied_at " + "FROM job_applications a "
+				+ "INNER JOIN users u ON a.seeker_id = u.user_id " + "INNER JOIN jobs j ON a.job_id = j.job_id "
+				+ "WHERE a.job_id = " + jobId + " ORDER BY a.applied_at DESC";
 
-		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		try (Connection con = DBConnection.getConnection(); java.sql.Statement st = con.createStatement()) {
 
-			ps.setInt(1, jobId);
-
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = st.executeQuery(sql);
 
 			while (rs.next()) {
 
@@ -230,13 +214,11 @@ public class JobApplicationDAO {
 		} catch (Exception e) {
 
 			System.out.println("ERROR WHILE GETTING APPLICANTS");
-
 			e.printStackTrace();
 		}
 
 		return applicants;
 	}
-
 
 	public boolean updateApplicationStatus(int applicationId, int recruiterId, String status) {
 
